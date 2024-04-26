@@ -1,0 +1,957 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="John Doe">
+  <meta name="keywords" content="">
+  
+    <meta property="og:type" content="website">
+<meta property="og:title" content="Hexo">
+<meta property="og:url" content="http://example.com/page/4/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>Hexo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.7","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.2.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 100vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>XL</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Think Different"></span>
+          
+        </div>
+
+        
+      </div>
+
+      
+        <div class="scroll-down-bar">
+          <i class="iconfont icon-arrowdown"></i>
+        </div>
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      <div class="container nopadding-x-md">
+        <div id="board"
+          style="margin-top: 0">
+          
+          <div class="container">
+            <div class="row">
+              <div class="col-12 col-md-10 m-auto">
+                
+
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h2 class="index-header">
+        
+        <a href="/2024/04/26/Java%20%E9%9B%86%E5%90%88%20---%20%E5%A6%82%E4%BD%95%E9%81%8D%E5%8E%86Map/" target="_self">
+          Java 集合 --- 如何遍历Map
+        </a>
+      </h2>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2024/04/26/Java%20%E9%9B%86%E5%90%88%20---%20%E5%A6%82%E4%BD%95%E9%81%8D%E5%8E%86Map/" target="_self">
+        <div>
+          Map没有继承Collection接口 AbstractMap和AbstractCollection是平级关系   Map的基本操作123456789101112131415161718192021222324252627package map;import java.util.*;/** * This program demonstrates the use of a map with ke
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2024-04-26 23:04" pubdate>
+              2024-04-26
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Java-SE/" class="category-chain-item">Java SE</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/Java-SE/Java-%E9%9B%86%E5%90%88Collection/" class="category-chain-item">Java --- 集合Collection</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
+        
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h2 class="index-header">
+        
+        <a href="/2024/04/26/Java%20%E9%9B%86%E5%90%88%20---%20Comparable%20%E5%92%8C%20Comparator/" target="_self">
+          Java 集合 --- Comparable 和 Comparator
+        </a>
+      </h2>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2024/04/26/Java%20%E9%9B%86%E5%90%88%20---%20Comparable%20%E5%92%8C%20Comparator/" target="_self">
+        <div>
+          Comparable 接口  comparable接口只有一个方法 — compareTo(T o) 一个类实现 Comparable 接口并重写 compareTo 方法就可以支持 Collections.sort 和 Arrays.sort 的排序 返回值 — 从小到大排序:   如果当前对象this大于形参对象obj，则返回正整数； 如果当前对象this小于形参对象obj，则返回负整数； 如
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2024-04-26 23:04" pubdate>
+              2024-04-26
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Java-SE/" class="category-chain-item">Java SE</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/Java-SE/Java-%E9%9B%86%E5%90%88Collection/" class="category-chain-item">Java --- 集合Collection</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
+        
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h2 class="index-header">
+        
+        <a href="/2024/04/26/Java%20%E9%9B%86%E5%90%88%20---%20Array%E5%92%8CList%E4%BA%92%E7%9B%B8%E8%BD%AC%E6%8D%A2/" target="_self">
+          Java 集合 --- Array和List互相转换
+        </a>
+      </h2>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2024/04/26/Java%20%E9%9B%86%E5%90%88%20---%20Array%E5%92%8CList%E4%BA%92%E7%9B%B8%E8%BD%AC%E6%8D%A2/" target="_self">
+        <div>
+          List 转 Array使用toArray方法只能返回 Object [] 数组 12List&lt;Integer&gt; nums = new ArrayList&lt;Integer&gt;();Object [] array = nums.toArray(); 而强制转型会出现异常 12Integer[] temp = (Integer[])nums.toArray();class [Lj
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2024-04-26 23:04" pubdate>
+              2024-04-26
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Java-SE/" class="category-chain-item">Java SE</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/Java-SE/Java-%E9%9B%86%E5%90%88Collection/" class="category-chain-item">Java --- 集合Collection</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
+        
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h2 class="index-header">
+        
+        <a href="/2024/04/26/Java%20%E5%A4%9A%E7%BA%BF%E7%A8%8B%20---%20%E5%88%9B%E5%BB%BA%E7%BA%BF%E7%A8%8B,%20%E7%BA%BF%E7%A8%8B%E7%8A%B6%E6%80%81/" target="_self">
+          Java 多线程 --- 创建线程,  线程状态
+        </a>
+      </h2>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2024/04/26/Java%20%E5%A4%9A%E7%BA%BF%E7%A8%8B%20---%20%E5%88%9B%E5%BB%BA%E7%BA%BF%E7%A8%8B,%20%E7%BA%BF%E7%A8%8B%E7%8A%B6%E6%80%81/" target="_self">
+        <div>
+          如何创建线程使用Thread类  创建一个类继承Thread类 重写该接口的run()方法，该run()方法的方法体是该线程的线程执行体   1234567891011121314151617181920212223242526package SimpleThread;public class SimpleThread extends Thread &#123;	static int count
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2024-04-26 23:04" pubdate>
+              2024-04-26
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Java-SE/" class="category-chain-item">Java SE</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/Java-SE/Java-%E5%A4%9A%E7%BA%BF%E7%A8%8B/" class="category-chain-item">Java --- 多线程</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
+        
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h2 class="index-header">
+        
+        <a href="/2024/04/26/Java%20%E5%A4%9A%E7%BA%BF%E7%A8%8B%20---%20%E7%BB%88%E6%AD%A2%E7%BA%BF%E7%A8%8B%20Terminate%20Threads/" target="_self">
+          Java 多线程 --- 终止线程 Terminate Threads
+        </a>
+      </h2>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2024/04/26/Java%20%E5%A4%9A%E7%BA%BF%E7%A8%8B%20---%20%E7%BB%88%E6%AD%A2%E7%BA%BF%E7%A8%8B%20Terminate%20Threads/" target="_self">
+        <div>
+          为什么要终止线程  线程消耗资源(包括内存,内核, CPU等资源).  只有当一个Java程序的所有线程都运行结束的时候，一个 Java 程序才算运行结束. 所以当一个线程不再被需要使用时或者运行不正常时需要清理掉.     下面代码中, 即使main方法已经运行完毕, 但是整个程序还是等待 BlockingTask运行结束.   1234567891011121314151617181920pu
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2024-04-26 23:04" pubdate>
+              2024-04-26
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Java-SE/" class="category-chain-item">Java SE</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/Java-SE/Java-%E5%A4%9A%E7%BA%BF%E7%A8%8B/" class="category-chain-item">Java --- 多线程</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
+        
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h2 class="index-header">
+        
+        <a href="/2024/04/26/Java%20%E5%A4%9A%E7%BA%BF%E7%A8%8B%20---%20%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%9A%84%E7%9B%B8%E5%85%B3%E6%A6%82%E5%BF%B5/" target="_self">
+          Java 多线程 --- 多线程的相关概念
+        </a>
+      </h2>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2024/04/26/Java%20%E5%A4%9A%E7%BA%BF%E7%A8%8B%20---%20%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%9A%84%E7%9B%B8%E5%85%B3%E6%A6%82%E5%BF%B5/" target="_self">
+        <div>
+          背景: 操作系统 — 线程&#x2F;进程 同步 Race Condition 问题  下面的代码会创建100个银行账户,每一个账户初始金额是1000. 然后不段的随机给另外一个账户转钱. 不管怎么转钱, 100个账户的总金额应该一直保持为10000.  但是有的输出结果总金额不到10000, 因为出现了对critical section资源竞争的问题   12345678910111213141
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2024-04-26 22:54" pubdate>
+              2024-04-26
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Java-SE/" class="category-chain-item">Java SE</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/Java-SE/Java-%E5%A4%9A%E7%BA%BF%E7%A8%8B/" class="category-chain-item">Java --- 多线程</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
+        
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h2 class="index-header">
+        
+        <a href="/2024/04/26/Java%20%E5%A4%9A%E7%BA%BF%E7%A8%8B%20---%20%E9%94%81%E7%9A%84%E6%A6%82%E5%BF%B5%E5%92%8C%E7%B1%BB%E5%9E%8B%E5%88%92%E5%88%86/" target="_self">
+          Java 多线程 --- 锁的概念和类型划分
+        </a>
+      </h2>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2024/04/26/Java%20%E5%A4%9A%E7%BA%BF%E7%A8%8B%20---%20%E9%94%81%E7%9A%84%E6%A6%82%E5%BF%B5%E5%92%8C%E7%B1%BB%E5%9E%8B%E5%88%92%E5%88%86/" target="_self">
+        <div>
+          锁的概念  锁可以将多个线程对共享数据的并发访问转换为串行访问, 这样一个共享数据一次只能被一个线程访问, 该线程访问结束后其他线程才能对其进行访问. 锁具有排他性 (Exclusive), 即一个锁一次只能被一个线程持有. 所以这种锁被称为排他锁或者互斥锁 (Mutex).   锁可以保证 — 原子性, 可见性, 有序性原子性   锁是通过互斥保障原子性的。所谓至斥(Mutual Exclusi
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2024-04-26 22:54" pubdate>
+              2024-04-26
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Java-SE/" class="category-chain-item">Java SE</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/Java-SE/Java-%E5%A4%9A%E7%BA%BF%E7%A8%8B/" class="category-chain-item">Java --- 多线程</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
+        
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h2 class="index-header">
+        
+        <a href="/2024/04/26/Java%20%E5%A4%9A%E7%BA%BF%E7%A8%8B%20---%20%E7%BA%BF%E7%A8%8B%E5%90%8C%E6%AD%A5%E4%B8%8E%E7%BA%BF%E7%A8%8B%E5%8D%8F%E4%BD%9C%E7%9A%84%E5%8C%BA%E5%88%AB/" target="_self">
+          Java 多线程 --- 线程同步与线程协作的区别
+        </a>
+      </h2>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2024/04/26/Java%20%E5%A4%9A%E7%BA%BF%E7%A8%8B%20---%20%E7%BA%BF%E7%A8%8B%E5%90%8C%E6%AD%A5%E4%B8%8E%E7%BA%BF%E7%A8%8B%E5%8D%8F%E4%BD%9C%E7%9A%84%E5%8C%BA%E5%88%AB/" target="_self">
+        <div>
+          Java中的线程同步机制包括  ReentrantLock (使用锁) synchronized关键字 (使用锁) volatile关键字 Java 原子变量类 (Atomics): java.util.concurrent.atomic  线程安全的集合: ConcurrentHashMap&lt;K,V&gt;	, ConcurrentLinkedDeque&lt;E&gt;,  Concur
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2024-04-26 22:54" pubdate>
+              2024-04-26
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Java-SE/" class="category-chain-item">Java SE</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/Java-SE/Java-%E5%A4%9A%E7%BA%BF%E7%A8%8B/" class="category-chain-item">Java --- 多线程</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
+        
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h2 class="index-header">
+        
+        <a href="/2024/04/26/Java%20%E5%A4%9A%E7%BA%BF%E7%A8%8B%20---%20%E7%BA%BF%E7%A8%8B%E5%90%8C%E6%AD%A5%20volatile%E5%85%B3%E9%94%AE%E5%AD%97/" target="_self">
+          Java 多线程 --- 线程同步 volatile关键字
+        </a>
+      </h2>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2024/04/26/Java%20%E5%A4%9A%E7%BA%BF%E7%A8%8B%20---%20%E7%BA%BF%E7%A8%8B%E5%90%8C%E6%AD%A5%20volatile%E5%85%B3%E9%94%AE%E5%AD%97/" target="_self">
+        <div>
+          volatile keyword  Volatile是Java虚拟机提供的轻量级的同步机制 Volatile可以保证可见性, 禁止指令重排, 但是不保证原子性  volatile利用MESI协议和snooping保证可见性 volatile不保证原子性, 比如 num++ 这个操作实际上分为三步, 拿到num值, 对num值加一, 放回num值.  volatile关键字保证了拿到number的值
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2024-04-26 22:54" pubdate>
+              2024-04-26
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Java-SE/" class="category-chain-item">Java SE</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/Java-SE/Java-%E5%A4%9A%E7%BA%BF%E7%A8%8B/" class="category-chain-item">Java --- 多线程</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
+        
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h2 class="index-header">
+        
+        <a href="/2024/04/26/Java%20%E5%A4%9A%E7%BA%BF%E7%A8%8B%20---%20%E7%BA%BF%E7%A8%8B%E5%90%8C%E6%AD%A5%20%E5%86%85%E9%83%A8%E9%94%81synchronized/" target="_self">
+          Java 多线程 --- 线程同步 内部锁synchronized
+        </a>
+      </h2>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2024/04/26/Java%20%E5%A4%9A%E7%BA%BF%E7%A8%8B%20---%20%E7%BA%BF%E7%A8%8B%E5%90%8C%E6%AD%A5%20%E5%86%85%E9%83%A8%E9%94%81synchronized/" target="_self">
+        <div>
+          Intrinsic Lock (Monitor)  synchronized锁机制是基于monitor对象（也被叫做Monitor 或 Monitor Lock监视器锁或 Intrinsic Lock）实现的，每个对象都存在一个monitor对象与之关联，对象头中有一块专门的内存区域用于存储与之关联的monitor对象的地址。     每个monitor对象有三个部分  The Owner: 表示
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2024-04-26 00:51" pubdate>
+              2024-04-26
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Java-SE/" class="category-chain-item">Java SE</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/Java-SE/Java-%E5%A4%9A%E7%BA%BF%E7%A8%8B/" class="category-chain-item">Java --- 多线程</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
+        
+        
+      </div>
+    </article>
+  </div>
+
+
+
+  <nav aria-label="navigation">
+    <span class="pagination" id="pagination">
+      <a class="extend prev" rel="prev" href="/page/3/#board"><i class="iconfont icon-arrowleft"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/#board">2</a><a class="page-number" href="/page/3/#board">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/#board">5</a><a class="page-number" href="/page/6/#board">6</a><a class="page-number" href="/page/7/#board">7</a><a class="extend next" rel="next" href="/page/5/#board"><i class="iconfont icon-arrowright"></i></a>
+    </span>
+  </nav>
+
+
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

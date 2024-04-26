@@ -1,0 +1,785 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="XL">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Exception 类型  所有的异常都从 java.lang.Throwable 继承     Exception class可以被分为三种类型 system errors, exception, runtime exceptions  Error: There is little you can do beyond notifying the user and trying to termin">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java 基础 --- 异常 Exception">
+<meta property="og:url" content="http://example.com/2024/04/26/Java%20%E5%9F%BA%E7%A1%80%20---%20%E5%BC%82%E5%B8%B8%20Exception/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="Exception 类型  所有的异常都从 java.lang.Throwable 继承     Exception class可以被分为三种类型 system errors, exception, runtime exceptions  Error: There is little you can do beyond notifying the user and trying to termin">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/2024/04/26/Java%20%E5%9F%BA%E7%A1%80%20---%20%E5%BC%82%E5%B8%B8%20Exception/1.png">
+<meta property="og:image" content="http://example.com/2024/04/26/Java%20%E5%9F%BA%E7%A1%80%20---%20%E5%BC%82%E5%B8%B8%20Exception/2.png">
+<meta property="og:image" content="http://example.com/2024/04/26/Java%20%E5%9F%BA%E7%A1%80%20---%20%E5%BC%82%E5%B8%B8%20Exception/3.png">
+<meta property="og:image" content="http://example.com/2024/04/26/Java%20%E5%9F%BA%E7%A1%80%20---%20%E5%BC%82%E5%B8%B8%20Exception/4.png">
+<meta property="og:image" content="http://example.com/2024/04/26/Java%20%E5%9F%BA%E7%A1%80%20---%20%E5%BC%82%E5%B8%B8%20Exception/5.png">
+<meta property="og:image" content="http://example.com/2024/04/26/Java%20%E5%9F%BA%E7%A1%80%20---%20%E5%BC%82%E5%B8%B8%20Exception/6.png">
+<meta property="og:image" content="http://example.com/2024/04/26/Java%20%E5%9F%BA%E7%A1%80%20---%20%E5%BC%82%E5%B8%B8%20Exception/7.png">
+<meta property="og:image" content="http://example.com/2024/04/26/Java%20%E5%9F%BA%E7%A1%80%20---%20%E5%BC%82%E5%B8%B8%20Exception/8.png">
+<meta property="og:image" content="http://example.com/2024/04/26/Java%20%E5%9F%BA%E7%A1%80%20---%20%E5%BC%82%E5%B8%B8%20Exception/9.png">
+<meta property="og:image" content="http://example.com/2024/04/26/Java%20%E5%9F%BA%E7%A1%80%20---%20%E5%BC%82%E5%B8%B8%20Exception/10.png">
+<meta property="og:image" content="http://example.com/2024/04/26/Java%20%E5%9F%BA%E7%A1%80%20---%20%E5%BC%82%E5%B8%B8%20Exception/11.png">
+<meta property="og:image" content="http://example.com/2024/04/26/Java%20%E5%9F%BA%E7%A1%80%20---%20%E5%BC%82%E5%B8%B8%20Exception/12.png">
+<meta property="og:image" content="http://example.com/2024/04/26/Java%20%E5%9F%BA%E7%A1%80%20---%20%E5%BC%82%E5%B8%B8%20Exception/13.png">
+<meta property="og:image" content="http://example.com/2024/04/26/Java%20%E5%9F%BA%E7%A1%80%20---%20%E5%BC%82%E5%B8%B8%20Exception/14.png">
+<meta property="article:published_time" content="2024-04-25T16:15:57.000Z">
+<meta property="article:modified_time" content="2024-04-25T16:25:35.583Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/2024/04/26/Java%20%E5%9F%BA%E7%A1%80%20---%20%E5%BC%82%E5%B8%B8%20Exception/1.png">
+  
+  
+  
+  <title>Java 基础 --- 异常 Exception - Hexo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.7","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.2.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>XL</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Java 基础 --- 异常 Exception"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-04-26 00:15" pubdate>
+          2024年4月26日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          516 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          5 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Java 基础 --- 异常 Exception</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="Exception-类型"><a href="#Exception-类型" class="headerlink" title="Exception 类型"></a>Exception 类型</h1><blockquote>
+<ul>
+<li>所有的异常都从 <code>java.lang.Throwable</code> 继承</li>
+</ul>
+</blockquote>
+<blockquote>
+<ul>
+<li>Exception class可以被分为三种类型 <strong>system errors</strong>, <strong>exception</strong>, <strong>runtime exceptions</strong><blockquote>
+<ul>
+<li><strong>Error</strong>: There is little you can do beyond notifying the user and trying to terminate the program gracefully. Example: <strong>LinkageError</strong>, <strong>VirtualMachineError</strong></li>
+</ul>
+</blockquote>
+</li>
+</ul>
+<blockquote>
+<ul>
+<li><strong>Exceptions</strong>: describes errors caused by your program and by external circumstances. Example: <strong>ClassNotFoundException, IOException,</strong></li>
+</ul>
+</blockquote>
+<blockquote>
+<ul>
+<li><strong>Runtime Exceptions</strong>: describes programming errors, such as bad casting, accessing an out-of-bounds array, and numeric errors. Example: <strong>NullPointerException, IndexOutOfBoundsException</strong><br><img src="/2024/04/26/Java%20%E5%9F%BA%E7%A1%80%20---%20%E5%BC%82%E5%B8%B8%20Exception/1.png" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></li>
+</ul>
+</blockquote>
+</blockquote>
+<blockquote>
+<ul>
+<li><strong>Unchecked Exception</strong>: 不用被强制的显式的抛出或者捕获, 包括 <strong>runtime exceptions</strong>, <strong>error</strong> 和它们的子类<br>In most cases, unchecked exceptions reflect programming logic errors that are unrecoverable. For example, <strong>NullPointerException</strong></li>
+<li><strong>Checked Exception</strong>: 必须强制的被显式的抛出或者捕获(也就是使用try catch处理)，其余的exception都为checked exception</li>
+</ul>
+</blockquote>
+<h1 id="使用Exception"><a href="#使用Exception" class="headerlink" title="使用Exception"></a>使用Exception</h1><p><strong>声明 Exception</strong></p>
+ <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">myMethod</span><span class="hljs-params">()</span> <span class="hljs-keyword">throws</span> Exception1<br></code></pre></td></tr></table></figure>
+
+ <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">myMethod</span><span class="hljs-params">()</span> <span class="hljs-keyword">throws</span> Exception1, Exception2, ..., ExceptionN<br></code></pre></td></tr></table></figure>
+
+<p><strong>抛出Exception</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">IllegalArgumentException</span>(<span class="hljs-string">&quot;Wrong Argument&quot;</span>);<br></code></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">IllegalArgumentException</span> <span class="hljs-variable">ex</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">IllegalArgumentException</span>(<span class="hljs-string">&quot;Wrong Argument&quot;</span>);<br><span class="hljs-keyword">throw</span> ex;<br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<ul>
+<li><strong>注意throw是抛出异常的时候用, throws是声明异常的时候用</strong></li>
+</ul>
+</blockquote>
+<p><strong>Catch Exception</strong></p>
+<blockquote>
+<p><img src="/2024/04/26/Java%20%E5%9F%BA%E7%A1%80%20---%20%E5%BC%82%E5%B8%B8%20Exception/2.png" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></p>
+<ul>
+<li><strong>Note: 在method2中，如果exception不是ex3，没有被catch住，则程序直接跳会method1，statment5和statment6都不会执行。</strong></li>
+</ul>
+</blockquote>
+<h1 id="Throwable-Class"><a href="#Throwable-Class" class="headerlink" title="Throwable Class"></a>Throwable Class</h1><blockquote>
+<p><img src="/2024/04/26/Java%20%E5%9F%BA%E7%A1%80%20---%20%E5%BC%82%E5%B8%B8%20Exception/3.png" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"><br><img src="/2024/04/26/Java%20%E5%9F%BA%E7%A1%80%20---%20%E5%BC%82%E5%B8%B8%20Exception/4.png" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"><br>使用 Throwable<br><img src="/2024/04/26/Java%20%E5%9F%BA%E7%A1%80%20---%20%E5%BC%82%E5%B8%B8%20Exception/5.png" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></p>
+</blockquote>
+<h1 id="Example"><a href="#Example" class="headerlink" title="Example"></a>Example</h1><blockquote>
+<p><img src="/2024/04/26/Java%20%E5%9F%BA%E7%A1%80%20---%20%E5%BC%82%E5%B8%B8%20Exception/6.png" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"><br><img src="/2024/04/26/Java%20%E5%9F%BA%E7%A1%80%20---%20%E5%BC%82%E5%B8%B8%20Exception/7.png" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></p>
+</blockquote>
+<h1 id="finally-关键字"><a href="#finally-关键字" class="headerlink" title="finally 关键字"></a>finally 关键字</h1><blockquote>
+<ul>
+<li>不管有没有exception发生, finally总会被执行<blockquote>
+<ul>
+<li>如果try中出现exception则程序不会回到try中, 执行完finally之后会继续往下执行</li>
+</ul>
+</blockquote>
+</li>
+<li><strong>即使在finally之前有return, finally里的代码还是会被执行</strong></li>
+</ul>
+</blockquote>
+<p><strong>执行顺序  try - catch -finally</strong></p>
+<blockquote>
+<p><img src="/2024/04/26/Java%20%E5%9F%BA%E7%A1%80%20---%20%E5%BC%82%E5%B8%B8%20Exception/8.png" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></p>
+</blockquote>
+<blockquote>
+<p>(假设try里有return)</p>
+<ul>
+<li>如果没有exception发生: statement4会被执行, statement 5不会被执行</li>
+<li>如果有exception 并且是 Exception 1, 则4和5都会被执行 </li>
+<li>如果有exception 并且不是 Exception 1, 则4会被执行, 然后程序报错</li>
+</ul>
+</blockquote>
+<blockquote>
+<p>(假设try里没有return)</p>
+<ul>
+<li>如果没有exception发生: statement4, statement 5都会被执行</li>
+<li>如果有exception 并且是 Exception 1, 则4和5都会被执行 </li>
+<li>如果有exception 并且不是 Exception 1, 则4会被执行, 然后程序报错</li>
+</ul>
+</blockquote>
+<blockquote>
+<ul>
+<li>没有exception: try和finally里都有return: 会使用finally里的return<br><img src="/2024/04/26/Java%20%E5%9F%BA%E7%A1%80%20---%20%E5%BC%82%E5%B8%B8%20Exception/9.png" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></li>
+</ul>
+</blockquote>
+<blockquote>
+<ul>
+<li>有exception, try,catch, finally里都有return: 会执行finally里的return<br><img src="/2024/04/26/Java%20%E5%9F%BA%E7%A1%80%20---%20%E5%BC%82%E5%B8%B8%20Exception/10.png" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></li>
+</ul>
+</blockquote>
+<p><strong>总结:</strong> </p>
+<blockquote>
+<ul>
+<li>如果finally里有return则一定会执行finally里的return</li>
+<li>如果finally里没有return<blockquote>
+<ul>
+<li>没有exception的情况会执行try里的return, 如果try里没有return会继续finally之后的代码执行</li>
+<li>有exception的情况会执行catch里的return,如果catch里没有return会继续finally之后的代码执行</li>
+</ul>
+</blockquote>
+</li>
+</ul>
+</blockquote>
+<p><strong>在finally中修改变量</strong></p>
+<blockquote>
+<ul>
+<li>finally相当于一个方法, 变量相当于参数, 所以遵循java值传递的规则</li>
+<li>下图中finally没有影响tryli的变量<br><img src="/2024/04/26/Java%20%E5%9F%BA%E7%A1%80%20---%20%E5%BC%82%E5%B8%B8%20Exception/11.png" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></li>
+<li>以下代码中finally中的put方法起作用了, 但是map &#x3D; null没有起作用<br><img src="/2024/04/26/Java%20%E5%9F%BA%E7%A1%80%20---%20%E5%BC%82%E5%B8%B8%20Exception/12.png" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></li>
+</ul>
+</blockquote>
+<h1 id="Chained-Exception"><a href="#Chained-Exception" class="headerlink" title="Chained Exception"></a>Chained Exception</h1><blockquote>
+<ul>
+<li>Sometimes, you may need to throw a new exception (with additional information) along with the original exception. This is called chained exceptions.<br><img src="/2024/04/26/Java%20%E5%9F%BA%E7%A1%80%20---%20%E5%BC%82%E5%B8%B8%20Exception/13.png" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></li>
+</ul>
+</blockquote>
+<h1 id="自定义Exception"><a href="#自定义Exception" class="headerlink" title="自定义Exception"></a>自定义Exception</h1><p><img src="/2024/04/26/Java%20%E5%9F%BA%E7%A1%80%20---%20%E5%BC%82%E5%B8%B8%20Exception/14.png" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Java-SE/" class="category-chain-item">Java SE</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/Java-SE/Java-%E5%9F%BA%E7%A1%80-%E5%B0%81%E8%A3%85-%E5%A4%9A%E6%80%81/" class="category-chain-item">Java --- 基础/封装/多态</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Java 基础 --- 异常 Exception</div>
+      <div>http://example.com/2024/04/26/Java 基础 --- 异常 Exception/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>XL</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年4月26日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/04/26/Java%E5%9F%BA%E7%A1%80%20---%20%E5%86%85%E9%83%A8%E7%B1%BB%20Inner%20Class/" title="Java基础 --- 内部类 Inner Class">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Java基础 --- 内部类 Inner Class</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/04/26/Java%E5%9F%BA%E7%A1%80%20---%20%E8%BD%AC%E5%9E%8B%20Casting/" title="Java基础--- 转型 Casting">
+                        <span class="hidden-mobile">Java基础--- 转型 Casting</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

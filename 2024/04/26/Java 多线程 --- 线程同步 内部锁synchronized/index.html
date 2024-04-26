@@ -1,0 +1,830 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="XL">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Intrinsic Lock (Monitor)  synchronized锁机制是基于monitor对象（也被叫做Monitor 或 Monitor Lock监视器锁或 Intrinsic Lock）实现的，每个对象都存在一个monitor对象与之关联，对象头中有一块专门的内存区域用于存储与之关联的monitor对象的地址。     每个monitor对象有三个部分  The Owner: 表示">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java 多线程 --- 线程同步 内部锁synchronized">
+<meta property="og:url" content="http://example.com/2024/04/26/Java%20%E5%A4%9A%E7%BA%BF%E7%A8%8B%20---%20%E7%BA%BF%E7%A8%8B%E5%90%8C%E6%AD%A5%20%E5%86%85%E9%83%A8%E9%94%81synchronized/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="Intrinsic Lock (Monitor)  synchronized锁机制是基于monitor对象（也被叫做Monitor 或 Monitor Lock监视器锁或 Intrinsic Lock）实现的，每个对象都存在一个monitor对象与之关联，对象头中有一块专门的内存区域用于存储与之关联的monitor对象的地址。     每个monitor对象有三个部分  The Owner: 表示">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2024-04-25T16:51:35.000Z">
+<meta property="article:modified_time" content="2024-04-26T14:56:32.933Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>Java 多线程 --- 线程同步 内部锁synchronized - Hexo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.7","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.2.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>XL</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Java 多线程 --- 线程同步 内部锁synchronized"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-04-26 00:51" pubdate>
+          2024年4月26日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          2.1k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          18 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Java 多线程 --- 线程同步 内部锁synchronized</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="Intrinsic-Lock-Monitor"><a href="#Intrinsic-Lock-Monitor" class="headerlink" title="Intrinsic Lock (Monitor)"></a>Intrinsic Lock (Monitor)</h1><blockquote>
+<ul>
+<li>synchronized锁机制是基于monitor对象（也被叫做<code>Monitor 或 Monitor Lock</code>监视器锁或 <code>Intrinsic Lock</code>）实现的，每个对象都存在一个monitor对象与之关联，对象头中有一块专门的内存区域用于存储与之关联的monitor对象的地址。</li>
+</ul>
+</blockquote>
+<blockquote>
+<ul>
+<li>每个monitor对象有三个部分<blockquote>
+<ul>
+<li><code>The Owner</code>: 表示目前锁的持有者, 如果为null则表示是无锁状态</li>
+<li><code>Entry Set:</code> 记录等待获得相应内部锁的线程. 多个线程申请同一个锁的时候, 只有一个申请者能够成为该锁的持有线程, 其他申请失败者会继续保留在Entry Set.</li>
+<li><code>Wait Set:</code>  当一个线程获得锁之后, 因为没有满足某些条件而不得不放弃锁 (调用wait方法). 会被放入Wait Set并进入阻塞状态</li>
+</ul>
+</blockquote>
+</li>
+</ul>
+</blockquote>
+<blockquote>
+<ul>
+<li>比如在HotSpot虚拟机中，monitor是由ObjectMonitor实现的，其主要数据结构如下（源码ObjectMonitor.hpp文件，C++实现):</li>
+</ul>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">//只列举出部分关键字段</span><br>ObjectMonitor() &#123;<br>	_object;      = NULL;	<span class="hljs-comment">//当前monitor关联的锁对象</span><br>    _header       = NULL;	<span class="hljs-comment">//当前monitor关联的锁对象的原始对象头</span><br>    _count        = <span class="hljs-number">0</span>;		<span class="hljs-comment">//抢占该monitor的线程数</span><br>    _owner        = NULL;	<span class="hljs-comment">//占用当前monitor的线程</span><br>    _WaitSet      = NULL; 	<span class="hljs-comment">//处于wait状态的线程，会被加入到该列表</span><br>    _EntryList    = NULL ; 	<span class="hljs-comment">//处于block状态的线程，会被加入到该列表</span><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<ul>
+<li>内部锁是非公平锁. 所以在wait set的线程被唤醒时, 会有其他的活跃线程(处于Runnable状态, 并且是第一次竞争该锁) 来一起竞争. 所以不是内部锁不是先到先得, 允许线程插队获得锁. </li>
+<li>内部锁是可重入锁, 有一个计数器记录目前线程的所有权, 为0时代表无锁, 为1时代表已被抢占, 当拥有锁的线程再次申请时, 计数器会进行加一操作.</li>
+<li>内部锁是重量级锁 因为monitor锁机制依赖于底层操作系统的Mutex Lock实现，挂起线程和恢复线程都需要从用户态切换到内核态去完成，状态转换耗费的成本非常高，所以synchronized是Java语言中的一个重量级操作</li>
+</ul>
+</blockquote>
+<h1 id="synchronized-关键字"><a href="#synchronized-关键字" class="headerlink" title="synchronized 关键字"></a>synchronized 关键字</h1><blockquote>
+<ul>
+<li>Intrinsic Lock是通过synchronized关键字触发的<blockquote>
+<ul>
+<li>synchronized修饰<code>实例方法</code>上，锁对象是当前的this对象</li>
+<li>synchronized修饰<code>静态方法</code>上，锁对象是方法区中的类对象，是一个全局锁</li>
+<li>synchronized修饰<code>代码块</code>，也就是synchronized(object){}，锁对象是()中的对象</li>
+</ul>
+</blockquote>
+</li>
+</ul>
+</blockquote>
+<blockquote>
+<ul>
+<li>synchronized保证原子性, 可见性, 有序性<blockquote>
+<ul>
+<li><code>原子性</code>: 基于 monitorenter 和 monitorexit 字节码指令，保证同步块只有单一线程执行。</li>
+<li><code>可见性</code>: synchronized 的可见性是由“<code>对一个变量执行 unlock 操作之前，必须先把此变量同步回主内存中（执行 store、write 操作）</code>”这条规则获得的。</li>
+<li><code>有序性</code>:</li>
+</ul>
+</blockquote>
+</li>
+</ul>
+</blockquote>
+<p><strong>具体实现</strong></p>
+<blockquote>
+<ul>
+<li>在修饰代码块时，字节码层面上是通过 <code>montiorenter</code> 和 <code>monitorexit</code> 指令来实现的锁获取与释放动作. 当线程进入到<code>monitorenter</code>指令后, 线程将会持有monitor对象.  退出<code>monitorenter</code>指令后，线程将会释放monitor对象<blockquote>
+<ul>
+<li><code>monitorenter</code>指令: 获取monitor对象的所有权, 并会发生如下3中情况之一：<blockquote>
+<ul>
+<li>monitor计数器为0，意味着目前还没有被获得，那这个线程就会立刻获得然后把锁计数器+1，一旦+1，别的线程再想获取，就需要等待</li>
+<li>如果这个monitor已经拿到了这个锁的所有权，又重入了这把锁，那锁计数器就会累加，变成2，并且随着重入的次数，会一直累加 (可重入性)</li>
+<li>第三种情况就是这把锁已经被别的线程获取了，等待锁释放</li>
+</ul>
+</blockquote>
+</li>
+<li><code>monitorexit</code>指令：释放对于monitor的所有权，<blockquote>
+<ul>
+<li>释放过程很简单，就是讲monitor的计数器减1，如果减完以后，计数器不是0，则代表刚才是重入进来的，当前线程还继续持有这把锁的所有权</li>
+<li>如果计数器变成0，则代表当前线程不再拥有该monitor的所有权，即释放锁.</li>
+</ul>
+</blockquote>
+</li>
+</ul>
+</blockquote>
+</li>
+<li>在修饰方法时, JVM通过<code>ACC_SYNCHRONIZED</code>这个标志区分一个方法是否为同步方法. 如果有<code>ACC_SYNCHRONIZED</code>标志, 则会先持有方法所在的monitor对象，然后再执行方法. 在该方法执行时间，其它任何线程均无法再获取到这个monitor对象，当线程执行完该方法后，他会释放掉这个monitor对象</li>
+</ul>
+</blockquote>
+<blockquote>
+<ul>
+<li>Intrinsic Lock的一些限制<blockquote>
+<ul>
+<li>You cannot interrupt a thread that is trying to acquire a lock.</li>
+<li>You cannot specify a timeout when trying to acquire a lock.</li>
+</ul>
+</blockquote>
+</li>
+</ul>
+</blockquote>
+<h2 id="synchronized-修饰实例方法"><a href="#synchronized-修饰实例方法" class="headerlink" title="synchronized 修饰实例方法"></a>synchronized 修饰实例方法</h2><blockquote>
+<ul>
+<li>用synchronized修饰的实例方法叫做<code>同步实例方法</code>, 锁对象是当前的<code>this对象</code></li>
+<li>同步方法的整个方法体就是一个临界区</li>
+</ul>
+</blockquote>
+<p><strong>Example 1: 循环递增序列号生成器</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">//只有一个线程可以更新序列号, 保证多线程情况下序列号正常更新</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">SafeCircularSeGenerator</span> &#123;<br>	<span class="hljs-keyword">private</span> <span class="hljs-type">short</span> <span class="hljs-variable">sequence</span> <span class="hljs-operator">=</span> -<span class="hljs-number">1</span>;<br>	<span class="hljs-keyword">public</span> <span class="hljs-keyword">synchronized</span> <span class="hljs-type">short</span> <span class="hljs-title function_">nextSequence</span><span class="hljs-params">()</span> &#123;<br>		<span class="hljs-keyword">if</span> (sequence &gt;= <span class="hljs-number">999</span>) &#123;<br>			sequence = <span class="hljs-number">0</span>;<br>		&#125;<br>		<span class="hljs-keyword">else</span> &#123;<br>			sequence++:<br>		&#125;<br>		<span class="hljs-keyword">return</span> sequence;<br>	&#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p><strong>Example 2: 使用synchronized重写银行账户的transfer方法:</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Bank</span><br>&#123;<br>	 <span class="hljs-keyword">private</span> <span class="hljs-type">double</span>[] accounts;<br>	 <span class="hljs-keyword">public</span> <span class="hljs-keyword">synchronized</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">transfer</span><span class="hljs-params">(<span class="hljs-type">int</span> from, <span class="hljs-type">int</span> to, <span class="hljs-type">int</span> amount)</span> <span class="hljs-keyword">throws</span> InterruptedException &#123;<br>	 	 <span class="hljs-comment">//余额不足, 等待入账</span><br>		 <span class="hljs-keyword">while</span> (accounts[from] &lt; amount)<br>			wait(); <span class="hljs-comment">// wait on intrinsic object lock&#x27;s single condition</span><br>		 accounts[from] -= amount;<br>		 accounts[to] += amount;<br>		 notifyAll(); <span class="hljs-comment">// notify all threads waiting on the condition</span><br>	 &#125;<br>	 <span class="hljs-keyword">public</span> <span class="hljs-keyword">synchronized</span> <span class="hljs-type">double</span> <span class="hljs-title function_">getTotalBalance</span><span class="hljs-params">()</span> &#123; . . . &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h2 id="synchronized-修饰代码块"><a href="#synchronized-修饰代码块" class="headerlink" title="synchronized 修饰代码块"></a>synchronized 修饰代码块</h2><blockquote>
+<ul>
+<li>synchronized修饰的代码块就是临界区,</li>
+<li>synchronized(object)，锁对象是()中的对象叫锁句柄, 是对应的锁 (可以是任何类型的Object或者this指针) </li>
+<li>具体格式如下</li>
+</ul>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">synchronized</span>(锁句柄 handle) &#123;<br>	<span class="hljs-comment">//critical section</span><br>&#125;<br></code></pre></td></tr></table></figure>
+<blockquote>
+<ul>
+<li>锁句柄的变量通常采用 <code>private final</code> 修饰. 这是因为锁句柄变量的值一旦改变, 会导致执行同一个同步块的多线程实际上使用不同的锁, 从而产生混乱 如: <code>private final Object lock = new Object()</code></li>
+</ul>
+</blockquote>
+<p><strong>Example 1: 使用sychronized代码块 实现循环递增序列号生成器</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">//只有一个线程可以更新序列号, 保证多线程情况下序列号正常更新</span><br><span class="hljs-keyword">public</span> <span class="hljs-type">short</span> <span class="hljs-title function_">nextSequence</span><span class="hljs-params">()</span> &#123;<br>	synchronied(<span class="hljs-built_in">this</span>) &#123;<br>		<span class="hljs-keyword">if</span> (sequence &gt;= <span class="hljs-number">999</span>) &#123;<br>			sequence = <span class="hljs-number">0</span>;<br>		&#125;<br>		<span class="hljs-keyword">else</span> &#123;<br>			sequence++:<br>		&#125;<br>		<span class="hljs-keyword">return</span> sequence;<br>	&#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p><strong>Example 2: 使用synchronized代码块重写银行账户的transfer方法:</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Bank</span> &#123;<br>	<span class="hljs-keyword">private</span> <span class="hljs-keyword">final</span> <span class="hljs-type">Object</span> <span class="hljs-variable">lock</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Object</span>();<br>	<br>	<span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">transfer</span><span class="hljs-params">(<span class="hljs-type">int</span> from, <span class="hljs-type">int</span> to, <span class="hljs-type">int</span> amount)</span> &#123;<br>		<span class="hljs-keyword">synchronized</span> (lock) &#123;<br>			accounts[from] -= amount;<br>			accounts[to] += amount;<br>		&#125;<br>		System.out.println(. . .);<br>	&#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h2 id="synchronized-修饰静态方法"><a href="#synchronized-修饰静态方法" class="headerlink" title="synchronized 修饰静态方法"></a>synchronized 修饰静态方法</h2><blockquote>
+<ul>
+<li>synchronized 关键字可以修饰静态方法, 也就是对 类 加锁, 也叫做类锁</li>
+<li>用static修饰的同步函数使用的锁为.class文件</li>
+</ul>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">Car</span> &#123;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">synchronized</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">staticRuning1</span><span class="hljs-params">(Thread thread)</span>&#123;<br>        System.out.println(thread.getName()+ <span class="hljs-string">&quot; static car1 得到锁&quot;</span>);<br>        System.out.println(<span class="hljs-string">&quot;------ static car1 is running ------&quot;</span>);<br>        working();<br>        System.out.println(thread.getName()+ <span class="hljs-string">&quot; static car1 释放锁&quot;</span>);<br>        System.out.println();<br>    &#125;<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">synchronized</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">staticRuning2</span><span class="hljs-params">(Thread thread)</span>&#123;<br>        System.out.println(thread.getName()+ <span class="hljs-string">&quot; static car2 得到锁&quot;</span>);<br>        System.out.println(<span class="hljs-string">&quot;------ static car2 is running ------&quot;</span>);<br>        working();<br>        System.out.println(thread.getName()+ <span class="hljs-string">&quot; static car2 释放锁&quot;</span>);<br>        System.out.println();<br>    &#125;<br><br>	<span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span>  <span class="hljs-title function_">working</span><span class="hljs-params">()</span>&#123;<br>        <span class="hljs-keyword">try</span>&#123;<br>            Thread.sleep(<span class="hljs-number">1000</span>);<br>        &#125;<span class="hljs-keyword">catch</span>(InterruptedException e)&#123;<br>            e.printStackTrace();<br>        &#125;<br>    &#125;<br>&#125;<br><br></code></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">test02</span> &#123;<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String[] args)</span> &#123;<br><br>        <span class="hljs-comment">//线程1 类</span><br>        <span class="hljs-type">Thread</span> <span class="hljs-variable">t1</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Thread</span>()&#123;<br>            <span class="hljs-meta">@Override</span><br>            <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">run</span><span class="hljs-params">()</span> &#123;<br>                Car.staticRuning1(Thread.currentThread()); <span class="hljs-comment">//同步类方法1</span><br>            &#125;<br>        &#125;;<br>        t1.start();<br><br>        <span class="hljs-comment">//线程2 类</span><br>        <span class="hljs-type">Thread</span> <span class="hljs-variable">t2</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Thread</span>()&#123;<br>            <span class="hljs-meta">@Override</span><br>            <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">run</span><span class="hljs-params">()</span> &#123;<br>                Car.staticRuning2(Thread.currentThread()); <span class="hljs-comment">//同步类方法2</span><br>            &#125;<br>        &#125;;<br>        t2.start();<br>    &#125;<br>&#125;<br><br>output --- Car类不能同时访问两个静态方法<br>Thread-<span class="hljs-number">0</span> <span class="hljs-keyword">static</span> car1 得到锁<br>------ <span class="hljs-keyword">static</span> car1 is running ------<br>Thread-<span class="hljs-number">0</span> <span class="hljs-keyword">static</span> car1 释放锁<br><br>Thread-<span class="hljs-number">1</span> <span class="hljs-keyword">static</span> car2 得到锁<br>------ <span class="hljs-keyword">static</span> car2 is running ------<br>Thread-<span class="hljs-number">1</span> <span class="hljs-keyword">static</span> car2 释放锁<br></code></pre></td></tr></table></figure>
+
+<h1 id="sychronized的可重入性"><a href="#sychronized的可重入性" class="headerlink" title="sychronized的可重入性"></a>sychronized的可重入性</h1><blockquote>
+<ul>
+<li>内部锁是可重入锁, monitor有一个计数器记录目前线程的所有权, 为0时代表无锁, 为1时代表已被抢占, 当拥有锁的线程再次申请时, 计数器会进行加一操作</li>
+<li>当释放时, monitor会进行减一操作</li>
+<li>可重入锁的好处是可以避免一定程度的死锁情况(自己调用自己), 可以递归调用</li>
+</ul>
+</blockquote>
+<blockquote>
+<ul>
+<li>Example 1: 同一类的同一方法</li>
+<li>因为方法被synchronized修饰，如果不可重入的话，无法执行递归，输出0和1代表进入了两次method方法，说明了Synchronized的可重用性。</li>
+</ul>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">SynchronizedReusing</span> &#123;<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String[] args)</span> &#123;<br>        <span class="hljs-type">SynchronizedReusing</span> <span class="hljs-variable">reusing</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">SynchronizedReusing</span>();<br>        reusing.method(<span class="hljs-number">0</span>);<br>    &#125;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">synchronized</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">method</span><span class="hljs-params">(<span class="hljs-type">int</span> i)</span>&#123;<br>        <span class="hljs-keyword">if</span>(i==<span class="hljs-number">1</span>)&#123;<br>            System.out.println(i++);<br>            <span class="hljs-keyword">return</span>;<br>        &#125;<br>        System.out.println(i++);<br>        method(i);<br>    &#125;<br>&#125;<br><br>Output:<br><span class="hljs-number">0</span><br><span class="hljs-number">1</span><br>Process finished with exit code <span class="hljs-number">0</span><br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<ul>
+<li>Example 2: 同一类的不同方法</li>
+<li>两个方法都被synchronized修饰，如果不可重入的话，method是无法访问method1的(锁对象都是this, 会有死锁)，说明了Synchronized的可重用性</li>
+</ul>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">SynchronizedReusing</span> &#123;<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String[] args)</span> &#123;<br>        <span class="hljs-type">SynchronizedReusing</span> <span class="hljs-variable">reusing</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">SynchronizedReusing</span>();<br>        reusing.method(<span class="hljs-number">0</span>);<br>    &#125;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">synchronized</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">method</span><span class="hljs-params">(<span class="hljs-type">int</span> i)</span>&#123;<br>        System.out.println(<span class="hljs-string">&quot;method    &quot;</span> + i++);<br>        method1(i);<br>    &#125;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">synchronized</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">method1</span><span class="hljs-params">(<span class="hljs-type">int</span> i)</span>&#123;<br>        System.out.println(<span class="hljs-string">&quot;method1   &quot;</span> + i);<br>    &#125;<br>&#125;<br><br>Output:<br>method    <span class="hljs-number">0</span><br>method1   <span class="hljs-number">1</span><br>Process finished with exit code <span class="hljs-number">0</span><br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<ul>
+<li>例三 不同类的方法</li>
+</ul>
+</blockquote>
+<pre><code class="java">public class SynchronizedReusing &#123;
+
+    public synchronized void method()&#123;
+        System.out.println(&quot;父类的方法&quot;);
+    &#125;
+&#125;
+
+class SynchronizedReusingSon extends SynchronizedReusing &#123;
+
+    @Override
+    public synchronized void method() &#123;
+        System.out.println(&quot;子类的方法&quot;);
+        super.method();
+    &#125;
+
+    public static void main(String[] args) &#123;
+        SynchronizedReusingSon son = new SynchronizedReusingSon();
+        son.method();
+    &#125;
+&#125;
+
+Output:
+子类的方法
+父类的方法
+Process finished with exit code 0
+``
+</code></pre>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Java-SE/" class="category-chain-item">Java SE</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/Java-SE/Java-%E5%A4%9A%E7%BA%BF%E7%A8%8B/" class="category-chain-item">Java --- 多线程</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Java 多线程 --- 线程同步 内部锁synchronized</div>
+      <div>http://example.com/2024/04/26/Java 多线程 --- 线程同步 内部锁synchronized/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>XL</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年4月26日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/04/26/Java%20%E5%A4%9A%E7%BA%BF%E7%A8%8B%20---%20%E7%BA%BF%E7%A8%8B%E5%90%8C%E6%AD%A5%20volatile%E5%85%B3%E9%94%AE%E5%AD%97/" title="Java 多线程 --- 线程同步 volatile关键字">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Java 多线程 --- 线程同步 volatile关键字</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/04/26/Java%20%E5%A4%9A%E7%BA%BF%E7%A8%8B%20---%20%E7%BA%BF%E7%A8%8B%E5%90%8C%E6%AD%A5%20%E6%98%BE%E5%BC%8F%E9%94%81ReentrantLock/" title="Java 多线程 --- 线程同步 显式锁ReentrantLock">
+                        <span class="hidden-mobile">Java 多线程 --- 线程同步 显式锁ReentrantLock</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

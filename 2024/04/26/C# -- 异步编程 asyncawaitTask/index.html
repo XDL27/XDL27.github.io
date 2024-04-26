@@ -1,0 +1,726 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="XL">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="异步机制的使用场景  在代码中遇到耗时任务时 (比如和数据库交互, 发送网络请求, 耗时的计算任务), 我们通常希望代码可以多任务同时进行, 保证不阻塞主线程 (比如我们不希望当进行网络请求时, 软件界面卡死)  所以 异步机制的核心是为了实现  执行耗时任务的同时不阻塞主线程(如UI)   异步编程就是一套解决上述问题的机制   在遇到I&#x2F;O bound 任务时, 异步机制是通过底层的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="C# -- 异步编程 async&#x2F;await&#x2F;Task&#x2F;Wait">
+<meta property="og:url" content="http://example.com/2024/04/26/C#%20--%20%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B%20asyncawaitTask/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="异步机制的使用场景  在代码中遇到耗时任务时 (比如和数据库交互, 发送网络请求, 耗时的计算任务), 我们通常希望代码可以多任务同时进行, 保证不阻塞主线程 (比如我们不希望当进行网络请求时, 软件界面卡死)  所以 异步机制的核心是为了实现  执行耗时任务的同时不阻塞主线程(如UI)   异步编程就是一套解决上述问题的机制   在遇到I&#x2F;O bound 任务时, 异步机制是通过底层的">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2024-04-26T15:47:12.000Z">
+<meta property="article:modified_time" content="2024-04-26T15:53:02.221Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>C# -- 异步编程 async/await/Task/Wait - Hexo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.7","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.2.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>XL</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="C# -- 异步编程 async/await/Task/Wait"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-04-26 23:47" pubdate>
+          2024年4月26日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          1.6k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          13 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">C# -- 异步编程 async/await/Task/Wait</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="异步机制的使用场景"><a href="#异步机制的使用场景" class="headerlink" title="异步机制的使用场景"></a>异步机制的使用场景</h1><blockquote>
+<ul>
+<li>在代码中遇到耗时任务时 (比如和数据库交互, 发送网络请求, 耗时的计算任务), 我们通常希望代码可以多任务同时进行, 保证不阻塞主线程 (比如我们不希望当进行网络请求时, 软件界面卡死) </li>
+<li>所以 异步机制的核心是为了实现  <strong>执行耗时任务的同时不阻塞主线程(如UI)</strong></li>
+</ul>
+</blockquote>
+<p><strong>异步编程就是一套解决上述问题的机制</strong></p>
+<blockquote>
+<ul>
+<li>在遇到I&#x2F;O bound 任务时, 异步机制是通过底层的DMA机制 完成一些耗时的I&#x2F;O 任务, 如网络请求, 文件读写等, 在这个过程中 线程仅仅负责给硬件传递命令. 但不负责执行任务<blockquote>
+<blockquote>
+<ul>
+<li>所有的程序最终都会由计算机硬件来执行，现代计算机大量的使用了DMA技术, 也就是Direct Memory Access. 网卡，声卡, 显卡也是有DMA 功能的。DMA 就是直接内存访问的意思，也就是说，拥有DMA 功能的硬件在和内存进行数据交换的时候可以不消耗 CPU 资源。只要 CPU 在发起数据传输时发送一个指令，硬件就开始自己和内存交换数据，在传输完成之后硬件会触发一个中断来通知操作完成。这些无须消耗 CPU 时问的操作正是异生操作的硬件基础.依靠底层硬件的DMA机制.</li>
+</ul>
+</blockquote>
+</blockquote>
+</li>
+<li>同时当遇到CPU bound的任务时, 异步机制则采取多线程的方法解决. 也就是创建新的线程在后台执行相应的任务.</li>
+</ul>
+</blockquote>
+<h1 id="TAP-—-Task-based-Asynchronous-Pattern"><a href="#TAP-—-Task-based-Asynchronous-Pattern" class="headerlink" title="TAP — Task-based Asynchronous Pattern"></a>TAP — Task-based Asynchronous Pattern</h1><blockquote>
+<ul>
+<li>C#的异步机制简称为TAP, 也就是核心是基于<code>Task</code> 和 <code>Task&lt;T&gt;</code> objects, 同时通过 <code>async</code> 和 <code>await</code> 关键字完成<blockquote>
+<ul>
+<li>For I&#x2F;O-bound code, you await an operation that returns a <code>Task</code> or <code>Task&lt;T&gt;</code> inside of an <code>async</code> method.</li>
+<li>For CPU-bound code, you await an operation that is started on a background thread with the <code>Task.Run</code> method.</li>
+</ul>
+</blockquote>
+</li>
+</ul>
+</blockquote>
+<h2 id="Example-—-async-await"><a href="#Example-—-async-await" class="headerlink" title="Example — async&#x2F;await"></a>Example — async&#x2F;await</h2><p><strong>await</strong></p>
+<blockquote>
+<ul>
+<li>await 表示从这里开始, 代码必须要等待异步方法完成才可以继续进行, 并将控制权交给上一级方法, 并返回一个Promise  <code>Task&lt;TResult&gt;</code></li>
+</ul>
+</blockquote>
+<p><strong>async</strong></p>
+<blockquote>
+<ul>
+<li>async 表示这个方法内部调用了 async方法并使用了await</li>
+<li>如果一个异步方法没有使用await关键字, 则代码则会同步运行.</li>
+</ul>
+</blockquote>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">async</span> Task&lt;<span class="hljs-built_in">int</span>&gt; <span class="hljs-title">GetUrlContentLengthAsync</span>()</span> &#123;<br>	<span class="hljs-keyword">var</span> client = <span class="hljs-keyword">new</span> HttpClient();<br>	<br>	<span class="hljs-comment">// 调用 GetStringAsync 进行网络请求. GetStringAsync 是一个耗时任务, 需要等待请求网站反应</span><br>	<span class="hljs-comment">// 此时 GetStringAsync 将控制权交给它的 GetUrlContentLengthAsync, 也就是继续往下运行的意思</span><br>	<span class="hljs-comment">// GetStringAsync 返回 Task&lt;TResult&gt; 并赋值给 getStringTask, TResult在这里是一个string类型. </span><br>	<span class="hljs-comment">// getStringTask表示这里有个Task,但是还没有完成, 并保证完成后会有一个实际的string值 (一个Promise)</span><br>	Task&lt;<span class="hljs-built_in">string</span>&gt; getStringTask = client.GetStringAsync(<span class="hljs-string">&quot;www.google.com&quot;</span>);<br>	<br>    <span class="hljs-comment">// DoIndenpendentWork 是一个不需要上面的返回值的一个方法, 继续正常运行</span><br>	DoIndenpendentWork();<br>	<br>     <span class="hljs-comment">//此时不需要要 getStringTask的任务已经做完了,必须要等待 getStringTask 拿到string value</span><br>	<span class="hljs-comment">//如果 getStringTask 还是没有完成, 则 GetUrlContentLengthAsync 会将控制权交给上一级方法.</span><br>	<span class="hljs-comment">//并同样返回一个 Task&lt;TResult&gt;. 这个返回值保证了这里最终会有一个string value, 也就是一个Promise</span><br>	<span class="hljs-comment">//当 GetStringAsync 完成时, 代码在这里回调 (getStringTask这个Task里会存进拿到的string value) </span><br>	<span class="hljs-comment">//继续运行</span><br>	<span class="hljs-built_in">string</span> contents = <span class="hljs-keyword">await</span> getStringTask;<br>	<span class="hljs-keyword">return</span> contents.length;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">DoIndependentWork</span>()</span> &#123;<br>	Console.WriteLine(<span class="hljs-string">&quot;Working...&quot;</span>);<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h2 id="异步方法的返回值"><a href="#异步方法的返回值" class="headerlink" title="异步方法的返回值"></a>异步方法的返回值</h2><blockquote>
+<ul>
+<li>Task, 没有返回值的异步方法必须返回Task</li>
+<li>有返回值的异步方法返回 <code>Task&lt;TResult&gt;</code> 其中TResult为实际返回类型</li>
+<li>Event Handler 返回值可以是void</li>
+<li><code>IAsyncEnumerable&lt;T&gt;</code>, for an async method that returns an async stream</li>
+</ul>
+</blockquote>
+<p><strong>Example: 返回<code>Task</code></strong></p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">async</span> Task <span class="hljs-title">DisplayCurrentInfoAsync</span>()</span><br>&#123;<br>    <span class="hljs-keyword">await</span> WaitAndApologizeAsync();<br><br>    Console.WriteLine(<span class="hljs-string">$&quot;Today is <span class="hljs-subst">&#123;DateTime.Now:D&#125;</span>&quot;</span>);<br>    Console.WriteLine(<span class="hljs-string">$&quot;The current time is <span class="hljs-subst">&#123;DateTime.Now.TimeOfDay:t&#125;</span>&quot;</span>);<br>    Console.WriteLine(<span class="hljs-string">&quot;The current temperature is 76 degrees.&quot;</span>);<br>&#125;<br><br><span class="hljs-function"><span class="hljs-keyword">static</span> <span class="hljs-keyword">async</span> Task <span class="hljs-title">WaitAndApologizeAsync</span>()</span><br>&#123;<br>    <span class="hljs-keyword">await</span> Task.Delay(<span class="hljs-number">2000</span>);<br><br>    Console.WriteLine(<span class="hljs-string">&quot;Sorry for the delay...\n&quot;</span>);<br>&#125;<br></code></pre></td></tr></table></figure>
+<p><strong>Example: 返回 <code>Task&lt;Result&gt;</code></strong></p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">async</span> Task <span class="hljs-title">ShowTodaysInfoAsync</span>()</span><br>&#123;<br>    <span class="hljs-built_in">string</span> message =<br>        <span class="hljs-string">$&quot;Today is <span class="hljs-subst">&#123;DateTime.Today:D&#125;</span>\n&quot;</span> +<br>        <span class="hljs-string">&quot;Today&#x27;s hours of leisure: &quot;</span> +<br>        <span class="hljs-string">$&quot;<span class="hljs-subst">&#123;<span class="hljs-keyword">await</span> GetLeisureHoursAsync()&#125;</span>&quot;</span>;<br><br>    Console.WriteLine(message);<br>&#125;<br><br><span class="hljs-function"><span class="hljs-keyword">static</span> <span class="hljs-keyword">async</span> Task&lt;<span class="hljs-built_in">int</span>&gt; <span class="hljs-title">GetLeisureHoursAsync</span>()</span><br>&#123;<br>    DayOfWeek today = <span class="hljs-keyword">await</span> Task.FromResult(DateTime.Now.DayOfWeek);<br><br>    <span class="hljs-built_in">int</span> leisureHours =<br>        today <span class="hljs-keyword">is</span> DayOfWeek.Saturday || today <span class="hljs-keyword">is</span> DayOfWeek.Sunday<br>        ? <span class="hljs-number">16</span> : <span class="hljs-number">5</span>;<br><br>    <span class="hljs-keyword">return</span> leisureHours;<br>&#125;<br><span class="hljs-comment">// Example output:</span><br><span class="hljs-comment">//    Today is Wednesday, May 24, 2017</span><br><span class="hljs-comment">//    Today&#x27;s hours of leisure: 5</span><br></code></pre></td></tr></table></figure>
+
+<p><strong>Example: 返回void</strong></p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">NaiveButton</span><br>&#123;<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">event</span> EventHandler? Clicked;<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">Click</span>()</span><br>    &#123;<br>        Console.WriteLine(<span class="hljs-string">&quot;Somebody has clicked a button. Let&#x27;s raise the event...&quot;</span>);<br>        Clicked?.Invoke(<span class="hljs-keyword">this</span>, EventArgs.Empty);<br>        Console.WriteLine(<span class="hljs-string">&quot;All listeners are notified.&quot;</span>);<br>    &#125;<br>&#125;<br><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">AsyncVoidExample</span><br>&#123;<br>    <span class="hljs-keyword">static</span> <span class="hljs-keyword">readonly</span> TaskCompletionSource&lt;<span class="hljs-built_in">bool</span>&gt; s_tcs = <span class="hljs-keyword">new</span> TaskCompletionSource&lt;<span class="hljs-built_in">bool</span>&gt;();<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">async</span> Task <span class="hljs-title">MultipleEventHandlersAsync</span>()</span><br>    &#123;<br>        Task&lt;<span class="hljs-built_in">bool</span>&gt; secondHandlerFinished = s_tcs.Task;<br>		<br>        <span class="hljs-keyword">var</span> button = <span class="hljs-keyword">new</span> NaiveButton();<br><br>        button.Clicked += OnButtonClicked1;<br>        button.Clicked += OnButtonClicked2Async;<br>        button.Clicked += OnButtonClicked3;<br><br>        Console.WriteLine(<span class="hljs-string">&quot;Before button.Click() is called...&quot;</span>);<br>        button.Click();<br>        Console.WriteLine(<span class="hljs-string">&quot;After button.Click() is called...&quot;</span>);<br><br>        <span class="hljs-keyword">await</span> secondHandlerFinished;<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">OnButtonClicked1</span>(<span class="hljs-params"><span class="hljs-built_in">object</span>? sender, EventArgs e</span>)</span><br>    &#123;<br>        Console.WriteLine(<span class="hljs-string">&quot;   Handler 1 is starting...&quot;</span>);<br>        Task.Delay(<span class="hljs-number">100</span>).Wait();<br>        Console.WriteLine(<span class="hljs-string">&quot;   Handler 1 is done.&quot;</span>);<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">async</span> <span class="hljs-keyword">void</span> <span class="hljs-title">OnButtonClicked2Async</span>(<span class="hljs-params"><span class="hljs-built_in">object</span>? sender, EventArgs e</span>)</span><br>    &#123;<br>        Console.WriteLine(<span class="hljs-string">&quot;   Handler 2 is starting...&quot;</span>);<br>        Task.Delay(<span class="hljs-number">100</span>).Wait();<br>        Console.WriteLine(<span class="hljs-string">&quot;   Handler 2 is about to go async...&quot;</span>);<br>        <span class="hljs-keyword">await</span> Task.Delay(<span class="hljs-number">500</span>);<br>        Console.WriteLine(<span class="hljs-string">&quot;   Handler 2 is done.&quot;</span>);<br>        s_tcs.SetResult(<span class="hljs-literal">true</span>);<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">OnButtonClicked3</span>(<span class="hljs-params"><span class="hljs-built_in">object</span>? sender, EventArgs e</span>)</span><br>    &#123;<br>        Console.WriteLine(<span class="hljs-string">&quot;   Handler 3 is starting...&quot;</span>);<br>        Task.Delay(<span class="hljs-number">100</span>).Wait();<br>        Console.WriteLine(<span class="hljs-string">&quot;   Handler 3 is done.&quot;</span>);<br>    &#125;<br>&#125;<br><span class="hljs-comment">// Example output:</span><br><span class="hljs-comment">//</span><br><span class="hljs-comment">// Before button.Click() is called...</span><br><span class="hljs-comment">// Somebody has clicked a button. Let&#x27;s raise the event...</span><br><span class="hljs-comment">//    Handler 1 is starting...</span><br><span class="hljs-comment">//    Handler 1 is done.</span><br><span class="hljs-comment">//    Handler 2 is starting...</span><br><span class="hljs-comment">//    Handler 2 is about to go async...</span><br><span class="hljs-comment">//    Handler 3 is starting...</span><br><span class="hljs-comment">//    Handler 3 is done.</span><br><span class="hljs-comment">// All listeners are notified.</span><br><span class="hljs-comment">// After button.Click() is called...</span><br><span class="hljs-comment">//    Handler 2 is done.</span><br></code></pre></td></tr></table></figure>
+<h1 id="异步机制和多线程的关系"><a href="#异步机制和多线程的关系" class="headerlink" title="异步机制和多线程的关系"></a>异步机制和多线程的关系</h1><blockquote>
+<ul>
+<li>异步机制的核心是  <strong>执行耗时任务的同时不阻塞主线程(如UI)</strong></li>
+<li>在遇到I&#x2F;O bound 任务时, 异步机制是通过底层的DMA机制 完成一些耗时的I&#x2F;O 任务, 如网络请求, 文件读写等, 在这个过程中 线程仅仅负责给硬件传递命令. 但不负责执行任务</li>
+<li>同时当遇到CPU bound的任务时, 异步机制则采取多线程的方法解决. 也就是创建新的线程在后台执行相应的任务.</li>
+</ul>
+</blockquote>
+<p><strong>I&#x2F;O-bound example: Download data from a web service</strong></p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-keyword">private</span> <span class="hljs-keyword">readonly</span> HttpClient _httpClient = <span class="hljs-keyword">new</span> HttpClient();<br><br>downloadButton.Clicked += <span class="hljs-keyword">async</span> (o, e) =&gt;<br>&#123;<br>    <span class="hljs-comment">// This line will yield control to the UI as the request</span><br>    <span class="hljs-comment">// from the web service is happening.</span><br>    <span class="hljs-comment">//</span><br>    <span class="hljs-comment">// The UI thread is now free to perform other work.</span><br>    <span class="hljs-keyword">var</span> stringData = <span class="hljs-keyword">await</span> _httpClient.GetStringAsync(URL);<br>    DoSomethingWithData(stringData);<br>&#125;;<br></code></pre></td></tr></table></figure>
+
+<p><strong>CPU-bound example: Perform a calculation for a game</strong></p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-function"><span class="hljs-keyword">private</span> DamageResult <span class="hljs-title">CalculateDamageDone</span>()</span><br>&#123;<br>    <span class="hljs-comment">// Code omitted:</span><br>    <span class="hljs-comment">//</span><br>    <span class="hljs-comment">// Does an expensive calculation and returns</span><br>    <span class="hljs-comment">// the result of that calculation.</span><br>&#125;<br><br>calculateButton.Clicked += <span class="hljs-keyword">async</span> (o, e) =&gt;<br>&#123;<br>    <span class="hljs-comment">// This line will yield control to the UI while CalculateDamageDone()</span><br>    <span class="hljs-comment">// performs its work. The UI thread is free to perform other work.</span><br>    <span class="hljs-keyword">var</span> damageResult = <span class="hljs-keyword">await</span> Task.Run(() =&gt; CalculateDamageDone());<br>    DisplayDamage(damageResult);<br>&#125;;<br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<ul>
+<li>Java中所有的耗时任务都是通过多线程完成的, 也就是在遇到耗时任务时, Java是使用多线程来完成, 而不是异步机制完成的</li>
+<li>而C# 引入异步机制是因为thread is expensive, 也就是不想用多线程去解决所有的耗时任务问题.</li>
+<li>但是Java团队认为异步机制不能有效的将异步和同步代码相结合 比如all methods in C# doing an await have to be marked as async. 而且异步方法和同步方法在编译阶段是完全不同的, 具体见Oracle工程师的讲座 <a target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=r6P0_FDr53Q&t=1231s">https://www.youtube.com/watch?v=r6P0_FDr53Q&amp;t&#x3D;1231s</a></li>
+<li>所以Java团队推出了轻量级线程 aka fibers&#x2F;lightweight threads 降低线程的使用代价, 消除异步机制的使用.</li>
+</ul>
+</blockquote>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/C/" class="category-chain-item">C#</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/C/C-%E5%B9%B6%E5%8F%91%E4%B8%8E%E5%BC%82%E6%AD%A5%E6%9C%BA%E5%88%B6/" class="category-chain-item">C# --- 并发与异步机制</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>C# -- 异步编程 async/await/Task/Wait</div>
+      <div>http://example.com/2024/04/26/C# -- 异步编程 asyncawaitTask/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>XL</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年4月26日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/04/26/C#%20---%20cancellation%20token/" title="C# --- cancellation token">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">C# --- cancellation token</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/04/26/Java%E5%9F%BA%E7%A1%80%20---%20%E6%B3%A8%E8%A7%A3%20Annotation/" title="Java基础 --- 注解 Annotation">
+                        <span class="hidden-mobile">Java基础 --- 注解 Annotation</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

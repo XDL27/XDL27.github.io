@@ -1,0 +1,755 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="XL">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Overall Structure   Netcore中一个项目对应一个solution, 一个solution包含多个project 一个最基本的微服务通常包含四个project: WebAPI, Common, UnitTests, IntegrationTests  其中WebAPI project类型为Web project, 其他为class library project    Web">
+<meta property="og:type" content="article">
+<meta property="og:title" content="C# ---netcore MVC项目框架结构 with MongoDB">
+<meta property="og:url" content="http://example.com/2024/04/27/C#%20---netcore%20MVC%E9%A1%B9%E7%9B%AE%E6%A1%86%E6%9E%B6%E7%BB%93%E6%9E%84%20with%20MongoDB/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="Overall Structure   Netcore中一个项目对应一个solution, 一个solution包含多个project 一个最基本的微服务通常包含四个project: WebAPI, Common, UnitTests, IntegrationTests  其中WebAPI project类型为Web project, 其他为class library project    Web">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/2024/04/27/C#%20---netcore%20MVC%E9%A1%B9%E7%9B%AE%E6%A1%86%E6%9E%B6%E7%BB%93%E6%9E%84%20with%20MongoDB/1.png">
+<meta property="og:image" content="http://example.com/2024/04/27/C#%20---netcore%20MVC%E9%A1%B9%E7%9B%AE%E6%A1%86%E6%9E%B6%E7%BB%93%E6%9E%84%20with%20MongoDB/2.png">
+<meta property="article:published_time" content="2024-04-26T16:10:55.000Z">
+<meta property="article:modified_time" content="2024-04-26T16:15:20.925Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/2024/04/27/C#%20---netcore%20MVC%E9%A1%B9%E7%9B%AE%E6%A1%86%E6%9E%B6%E7%BB%93%E6%9E%84%20with%20MongoDB/1.png">
+  
+  
+  
+  <title>C# ---netcore MVC项目框架结构 with MongoDB - Hexo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.7","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.2.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>XL</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="C# ---netcore MVC项目框架结构 with MongoDB"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-04-27 00:10" pubdate>
+          2024年4月27日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          1.1k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          10 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">C# ---netcore MVC项目框架结构 with MongoDB</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="Overall-Structure"><a href="#Overall-Structure" class="headerlink" title="Overall Structure"></a>Overall Structure</h1><p><img src="/2024/04/27/C#%20---netcore%20MVC%E9%A1%B9%E7%9B%AE%E6%A1%86%E6%9E%B6%E7%BB%93%E6%9E%84%20with%20MongoDB/1.png" srcset="/img/loading.gif" lazyload></p>
+<blockquote>
+<ul>
+<li>Netcore中一个项目对应一个solution, 一个solution包含多个project</li>
+<li>一个最基本的微服务通常包含四个project: <code>WebAPI</code>, <code>Common</code>, <code>UnitTests</code>, <code>IntegrationTests</code><blockquote>
+<ul>
+<li>其中WebAPI project类型为Web project, 其他为class library project</li>
+</ul>
+</blockquote>
+</li>
+<li>WebAPI会定义<blockquote>
+<ul>
+<li><code>controllers</code></li>
+<li><code>service implementation</code>  (也可以放在Common里, 防止circular reference)</li>
+<li><code>service Interface</code></li>
+</ul>
+</blockquote>
+</li>
+<li>Common则定义所有的基础组件, 包括<blockquote>
+<ul>
+<li><code>Dtos</code> (Data Transfer Object) , 也就是Response 和 Request</li>
+<li><code>Models</code> 服务中需要的实体类</li>
+<li><code>Persistence</code>: 和数据库交互的类(这里使用MongoDB)</li>
+<li><code>ExternalApiCall:</code> 和其他服务交互的类</li>
+</ul>
+</blockquote>
+</li>
+</ul>
+</blockquote>
+<h1 id="WebAPI-—-Controller"><a href="#WebAPI-—-Controller" class="headerlink" title="WebAPI — Controller"></a>WebAPI — Controller</h1><blockquote>
+<ul>
+<li>Controller 负责<blockquote>
+<ul>
+<li>将HTTP request映射成所定义的request Dto</li>
+<li>调用相对应的功能代码, 也就是service</li>
+<li>将处理结果映射成所定义的response Dto</li>
+<li>controller要尽可能的简短, 一个controller只包含最简单的service调用</li>
+</ul>
+</blockquote>
+</li>
+</ul>
+</blockquote>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">FeatureSettingsController</span> : <span class="hljs-title">ControllerBase</span><br>&#123;<br>	<span class="hljs-comment">//声明需要的其他service</span><br>	<span class="hljs-keyword">private</span> <span class="hljs-keyword">readonly</span> IFeatureSettingRequestHandler _requestHandler;<br>	<br>	<span class="hljs-comment">//构造函数初始化其他service, DI机制自动通过构造函数注入将对应的实例注入</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">FeatureSettingsController</span>(<span class="hljs-params">IFeatureSettingRequestHandler requestHandler</span>)</span><br>	&#123;<br>		requestHandler = reguestHandler;<br>	&#125;<br><br>	<span class="hljs-comment">//Example:</span><br>	[<span class="hljs-meta">HttpPost(<span class="hljs-string">&quot;featureSettings/query&quot;</span>)</span><br><span class="hljs-meta">	[ProducesResponseType(typeof(SettingsResponseDto), StatusCodes.Status200OK)</span><br><span class="hljs-meta">	[ProducesResponseType(StatusCodes.Status400BadRequest)</span>] <br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">async</span> Task&lt;SettingsResponseDto&gt; <span class="hljs-title">GetFeatureSettings</span>(<span class="hljs-params">[FromBody ，Required] GetSettingsRequestDto request</span>)</span><br>	&#123;<br>		<span class="hljs-keyword">return</span> <span class="hljs-keyword">await</span> _requestHandler.GetFeatureSettingsAsync(request);<br>	&#125;<br><br>	[<span class="hljs-meta">ProducesResponseType(typeof(SettingValuesResponseDto)</span>]<br>	[<span class="hljs-meta">ProducesResponseType(StatusCodes.status400BadRequest)</span><br><span class="hljs-meta">	public async Task&lt;SettingValuesResponseDto&gt; GetFeatureSettingValues([FromBody.Required</span>] GetsettingsRequestpto request)<br>	&#123;<br>		<span class="hljs-keyword">return</span> <span class="hljs-keyword">await</span> requestHandler.GetFeatureSettingValuesAsync(request);<br>	&#125;<br><br>&#125;<br></code></pre></td></tr></table></figure>
+<h1 id="WebAPI-—-Service-and-Service-Implementation"><a href="#WebAPI-—-Service-and-Service-Implementation" class="headerlink" title="WebAPI — Service and Service Implementation"></a>WebAPI — Service and Service Implementation</h1><blockquote>
+<ul>
+<li>一般把处理请求的功能模块设计成多个接口, 每个接口就是一个service, 而每个service有相对应的implementation</li>
+<li>一般结构为:<blockquote>
+<ul>
+<li><code>controller</code> —调用—  <code>requestHandler service</code> — 调用 —<br><code>functional service</code> —调用— <code>repository service</code></li>
+</ul>
+</blockquote>
+</li>
+</ul>
+</blockquote>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">FeatureSettingRequestHandler</span> :<span class="hljs-title">IFeatureSettingRequestHandler</span><br>&#123;<br>	<span class="hljs-comment">//声明需要的其他service</span><br>	<span class="hljs-keyword">private</span> <span class="hljs-keyword">readonly</span> ISettingDefinitionRepository _settingDefinitionRepository;<br>	<span class="hljs-keyword">private</span> <span class="hljs-keyword">readonly</span> ISettingValueRepository _settingValueRepository;<br>	<span class="hljs-keyword">private</span> <span class="hljs-keyword">readonly</span> SettingscopeManager _settingScopeManager;<br>	<span class="hljs-keyword">private</span> <span class="hljs-keyword">readonly</span> SettingValueValidatorFactory _settingValueValidatorFactory;<br><br>	<span class="hljs-comment">//构造函数初始化其他service, DI机制自动通过构造函数注入将对应的实例注入</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">FeaturesettingRequestHandler</span>(<span class="hljs-params"></span></span><br><span class="hljs-params"><span class="hljs-function">		ISettingDefinitionRepository settingDefinitionRepository,</span></span><br><span class="hljs-params"><span class="hljs-function">		ISettingValueRepository settingValueRepository,</span></span><br><span class="hljs-params"><span class="hljs-function">		SettinaScopeManager settinascopeManager</span></span><br><span class="hljs-params"><span class="hljs-function">		SettingValueValidatorFactory settingValueValidatorFactory</span>)</span><br>	&#123;<br>		_settingDefinitionRepository = settingDefinitionRepository;<br>		_settingValueRepository = settingValueRepository;<br>		_settingScopeManager = settingscopeManager;<br>		_settingValueValidatorFactory = settingValueValidatorFactory;<br>	&#125;<br>&#125;<br><br><span class="hljs-comment">//实现service需要的方法</span><br><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">async</span> Task&lt;settingsResponseDto&gt; <span class="hljs-title">GetFeatureSettingsAsync</span>(<span class="hljs-params">GetSettingsRequestDto request</span>)</span><br><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">async</span> Taske&lt;SettingValuesResponseDto&gt; <span class="hljs-title">GetFeatureSettingValuesAsync</span>(<span class="hljs-params">GetsettingsRequestDto request</span>)</span><br><span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">async</span> Task&lt;IReadonlyList&lt;SettingValueWithQueriedscope&gt;&gt; <span class="hljs-title">FindAndResolveValueswithHighestPriority</span>(<span class="hljs-params">IReadonlyList&lt;SettingId&gt; settingIds, IReadonlyList&lt;SettingScopeChain&gt;</span></span><br><span class="hljs-params"><span class="hljs-function">.....</span></span><br></code></pre></td></tr></table></figure>
+
+<h1 id="Common-—-Repository-Dtos-Models"><a href="#Common-—-Repository-Dtos-Models" class="headerlink" title="Common — Repository, Dtos, Models"></a>Common — Repository, Dtos, Models</h1><p> <strong>Repository Service</strong></p>
+<blockquote>
+<ul>
+<li>Repository service的功能是和数据库交互</li>
+<li>一般每个service对应MongoDB一个collection, 定义所对应的增删改查的操作</li>
+</ul>
+</blockquote>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">SettingValueRepository</span> : <span class="hljs-title">ISettingValueRepository</span><br>&#123;<br>	<span class="hljs-comment">//声明需要的 database client service</span><br>	<span class="hljs-keyword">private</span> <span class="hljs-keyword">readonly</span> IDatabaseClient _databaseClient;<br>	<span class="hljs-comment">//构造函数初始化其他service, DI机制自动通过构造函数注入将对应的实例注入</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">settingValueRepository</span>(<span class="hljs-params">IDatabaseClient databaseclient</span>)</span><br>	&#123;<br>		databaseClient = databaseclient;<br>	&#125;<br>	<br>	<span class="hljs-keyword">public</span> <span class="hljs-keyword">async</span> Task&lt;IReadonlyList&lt;SettingValue&gt;&gt; GetValuesAsync(IEnumerable&lt;SettingId&gt; settingIds, IEnumerable&lt;SettingScopeChain&gt; scopeChains)<br>	<span class="hljs-keyword">public</span> <span class="hljs-keyword">async</span> Task&lt;IReadonlyList&lt;settingValueChange&gt;&gt; SetValuesAsync(<span class="hljs-function">IEnumerable&lt;SettingValueChange&gt; settingValueChangeValues</span><br><span class="hljs-function">	<span class="hljs-keyword">public</span> <span class="hljs-keyword">async</span> Task&lt;<span class="hljs-built_in">long</span>&gt; <span class="hljs-title">DeleteValuesAsync</span>(<span class="hljs-params">settingscope settingscope</span>)</span><br><span class="hljs-function">	<span class="hljs-keyword">public</span> <span class="hljs-keyword">async</span> Task&lt;<span class="hljs-built_in">long</span>&gt; <span class="hljs-title">PurgeExpiredValuesAsync</span>()</span><br><span class="hljs-function">&#125;</span><br></code></pre></td></tr></table></figure>
+<p><strong>Dtos  and  Models</strong></p>
+<blockquote>
+<ul>
+<li>一般将所有需要的实体类都放进 Models,  实体类一般只有field, 用来描述一个object.包括定义数据库模型</li>
+</ul>
+</blockquote>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-comment">//定义数据库模型, 每个field表示一个document中的一个字段</span><br><span class="hljs-comment">//需要加 注解 和继承DatabaseDocument接口</span><br>[<span class="hljs-meta">DatabaseCollection(<span class="hljs-string">&quot;SettingDefinition&quot;</span>)</span>] <span class="hljs-comment">//字符串表示collection名字</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">SettingDefinition</span> : <span class="hljs-title">DatabaseDocument</span> <br>&#123;<br>	[<span class="hljs-meta">BsonRequired</span>]<br>	<span class="hljs-keyword">public</span> <span class="hljs-built_in">string</span> Code &#123; <span class="hljs-keyword">get</span>; <span class="hljs-keyword">init</span>; &#125;<br>	<br>	[<span class="hljs-meta">BsonRequired</span>]<br>	<span class="hljs-keyword">public</span> <span class="hljs-built_in">string</span> Namespace f <span class="hljs-keyword">get</span>; <span class="hljs-keyword">init</span>; &#125;<br>	<br>	[<span class="hljs-meta">BsonRequired</span>]<br>	<span class="hljs-built_in">string</span> DisplayName &#123; <span class="hljs-keyword">get</span>; <span class="hljs-keyword">init</span>; )<br>	<br>	<span class="hljs-keyword">public</span> <span class="hljs-built_in">string</span> Description &#123; <span class="hljs-keyword">get</span>; <span class="hljs-keyword">init</span>: &#125;<br>	<br>	<span class="hljs-keyword">public</span> <span class="hljs-built_in">int</span>? DisplayOrder &#123; <span class="hljs-keyword">get</span>; <span class="hljs-keyword">init</span>; &#125;<br>	<br>	[<span class="hljs-meta">BsonRequired，BsonRepresentation(BsonType.string)</span><br><span class="hljs-meta">	public settingValueType Type &#123; get; init; &#125;</span><br><span class="hljs-meta">	</span><br><span class="hljs-meta">	public string sectionCode &#123; get; init; &#125;</span><br><span class="hljs-meta">	</span><br><span class="hljs-meta">	public ValidationRules ValidationRules &#123; get; init;&#125;</span><br><span class="hljs-meta">&#125;</span><br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<ul>
+<li>Dtos全称为 Data Transfer Object, 通常定义request和reponse和相关的实体类</li>
+</ul>
+</blockquote>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-comment">//下面定义了一个 response</span><br><span class="hljs-comment">//settingResponseDto, 会被框架映射成json string放入HTTP response</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">record</span> <span class="hljs-title">settingsResponseDto</span><br>&#123;<br>	[<span class="hljs-meta">Required</span>]  <br>	<span class="hljs-function"><span class="hljs-keyword">public</span> 	IReadonlylist&lt;SettingItemDtoWithdisplayPropertie&gt; <span class="hljs-title">Settings</span> (<span class="hljs-params"> <span class="hljs-keyword">get</span>; <span class="hljs-keyword">init</span>; </span>)</span> = Array.Empty&lt;settingItemDtowithDisplayproperties&gt;();<br>	<br>	[<span class="hljs-meta">Required</span>]<br>	<span class="hljs-keyword">public</span> TReadonlyList&lt;settingSectionDto&gt; Sections &#123; <span class="hljs-keyword">get</span>; <span class="hljs-keyword">init</span>; &#125; = Array.EmptyesettingsectionDto&gt;<span class="hljs-number">0</span>);<br>&#125;<br><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">record</span> <span class="hljs-title">SettingSectionDto</span><br>&#123;<br>	[<span class="hljs-meta">Required</span>]<br>	<span class="hljs-keyword">public</span> <span class="hljs-built_in">string</span> Code &#123; <span class="hljs-keyword">get</span>; <span class="hljs-keyword">init</span>; ]<br>	[<span class="hljs-meta">Required</span>]<br>	<span class="hljs-keyword">public</span> <span class="hljs-built_in">string</span> Namespace &#123; <span class="hljs-keyword">get</span>; <span class="hljs-keyword">init</span>; &#125;<br>	[<span class="hljs-meta">Required</span>]<br>	<span class="hljs-keyword">public</span> <span class="hljs-built_in">string</span> DisplayName &#123; <span class="hljs-keyword">get</span>; <span class="hljs-keyword">init</span>; &#125;<br>	<span class="hljs-keyword">public</span> <span class="hljs-built_in">string</span> Description &#123; <span class="hljs-keyword">get</span>; <span class="hljs-keyword">init</span>; &#125;<br>	<span class="hljs-keyword">public</span> <span class="hljs-built_in">int</span> Displayorder &#123; <span class="hljs-keyword">get</span>; <span class="hljs-keyword">init</span>; &#125;<br>&#125;<br><br><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">record</span> <span class="hljs-title">SettingItemDtcWithDisplayProperties</span><br>&#123;<br>	[<span class="hljs-meta">Required</span>]<br>	<span class="hljs-keyword">public</span> <span class="hljs-built_in">string</span> DisplayName &#123; <span class="hljs-keyword">get</span>; <span class="hljs-keyword">init</span>; &#125;<br>	<span class="hljs-keyword">public</span> <span class="hljs-built_in">string</span> Description &#123; <span class="hljs-keyword">get</span>; <span class="hljs-keyword">init</span>; &#125; <br>	<span class="hljs-keyword">public</span> <span class="hljs-built_in">string</span> sectionCode &#123; <span class="hljs-keyword">get</span>; <span class="hljs-keyword">init</span>; ]<br>	<span class="hljs-keyword">public</span> <span class="hljs-built_in">int</span>? DisplayOrder &#123; <span class="hljs-keyword">get</span>; <span class="hljs-keyword">init</span>; &#125;<br>	<span class="hljs-keyword">public</span> VaLidationRules ValidationRules &#123; <span class="hljs-keyword">get</span>; <span class="hljs-keyword">init</span>; &#125;<br>	<span class="hljs-keyword">public</span> SettingscopeDto InheritedFrom &#123; <span class="hljs-keyword">get</span>; <span class="hljs-keyword">init</span>; &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h1 id="Program-cs"><a href="#Program-cs" class="headerlink" title="Program.cs"></a>Program.cs</h1><blockquote>
+<ul>
+<li>netcore的web application 会从Program.cs文件开始运行</li>
+<li>Program.cs文件的主要功能是进行一些初始化配置和依赖注入</li>
+</ul>
+</blockquote>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-keyword">using</span> Microsoft.Extensions.Hosting;<br><span class="hljs-keyword">using</span> Common;<br><br><span class="hljs-keyword">var</span> builder = WebApplication.CreateBuilder(args);<br><br><span class="hljs-keyword">var</span> app = builder.BuildApplication();<br><br><span class="hljs-keyword">var</span> startupTasks = app.Services.GetServices&lt;IStartupTask&gt;();<br><br><span class="hljs-keyword">foreach</span>(<span class="hljs-keyword">var</span> startupTask <span class="hljs-keyword">in</span> startupTasks)<br>&#123;<br>    <span class="hljs-keyword">await</span> startupTask.ExecuteAsync();<br>&#125;<br><br>app.Run();<br><br><span class="hljs-comment">//Needed for  unit tests</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">partial</span> <span class="hljs-keyword">class</span> <span class="hljs-title">Program</span><br>&#123;<br><br>&#125;<br></code></pre></td></tr></table></figure>
+<blockquote>
+<ul>
+<li>配置所需要的组件, 包括数据库, MQ, Logging, Swagger等</li>
+<li>配置的核心就是进行依赖注入</li>
+</ul>
+</blockquote>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-keyword">internal</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">class</span> <span class="hljs-title">WebApplicationBuilderExtensions</span><br>&#123;<br>	<span class="hljs-function"><span class="hljs-keyword">internal</span> <span class="hljs-keyword">static</span> WebApplication <span class="hljs-title">BuildApplication</span>(<span class="hljs-params"><span class="hljs-keyword">this</span> webApplicationBuilder builder</span>)</span><br>	&#123;<br>		<span class="hljs-keyword">var</span> services = builder.Services:<br>		<span class="hljs-keyword">var</span> configuration = builder.Configuration;<br>		services.ConfigureLogging(configuration)<br>		.ConfiqureConfiguration(configuration)<br>		.ConfigureSwagger()<br>		.ConfigureAspNetCore()<br>		.ConfigureMongo()<br>		.ConfigureRabbitMg()<br>		.Configuresecurity()<br>		.ConfigureBusinessCode()<br>	&#125;<br>&#125;<br><br></code></pre></td></tr></table></figure>
+<blockquote>
+<ul>
+<li>下面是对service中自己定义的service进行依赖注入, 需要说明注入的service接口和所对应的Implementation.</li>
+</ul>
+</blockquote>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> IServiceCollection <span class="hljs-title">ConfigureBusinessCode</span>(<span class="hljs-params"><span class="hljs-keyword">this</span> IServiceCollection services</span>)</span><br>&#123;<br>	services.AddSingleton&lt;IstartupTask, SettingDefinitionInitializationTask&gt;();<br>	services.AddSingleton&lt;IFeatureSettingRequestHandler,FeatureSettingRequestHandler&gt;();<br>	services.AddSingleton&lt;SettingscopeManager&gt;();<br>	services.AddSingleton&lt;settingValueValidatorFactory&gt;();<br>	services.AddSingleton&lt;ISettingValueRepository，SettingValueRepository&gt;();<br>	services.AddSingleton&lt;ISettingDefinitionRepository, SettingDefinitionRepository&gt;();<br>	services,AddSingleton&lt;ISettingDefinitionSource,EmbeddedFilesettingDefinitionSource&gt;();<br>	services.AddSingleton&lt;IAssemblyResource，AssemblyResource&gt;();<br>	services.AddSingleton&lt;MemoryCacheFactory&gt;();<br>&#125;<br></code></pre></td></tr></table></figure>
+<blockquote>
+<ul>
+<li>依赖注入的本质是在服务运行前, 用一个容器(比如List), 将服务所需要的service创建出来并放进容器中, 这样在服务运行的时候需要用到service的时候, 直接从容器中取出 而不需要我们手动的new一个service</li>
+</ul>
+</blockquote>
+<h1 id="csproject-配置文件"><a href="#csproject-配置文件" class="headerlink" title=".csproject 配置文件"></a>.csproject 配置文件</h1><blockquote>
+<ul>
+<li>点击project名字, 会出现一个.csproject文件, 这就是这个project的配置文件, 包括所有引用的外部库的名字和版本信息<br><img src="/2024/04/27/C#%20---netcore%20MVC%E9%A1%B9%E7%9B%AE%E6%A1%86%E6%9E%B6%E7%BB%93%E6%9E%84%20with%20MongoDB/2.png" srcset="/img/loading.gif" lazyload></li>
+</ul>
+</blockquote>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/C/" class="category-chain-item">C#</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/C/C-%E6%97%A5%E5%B8%B8case%E8%AE%B0%E5%BD%95/" class="category-chain-item">C# --- 日常case记录</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>C# ---netcore MVC项目框架结构 with MongoDB</div>
+      <div>http://example.com/2024/04/27/C# ---netcore MVC项目框架结构 with MongoDB/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>XL</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年4月27日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/04/27/C#%20---%20%E4%BD%BF%E7%94%A8%20IValidatableObject%20+%20%5BRequired%5D%20%E6%8E%A5%E5%8F%A3%E8%BF%9B%E8%A1%8C%E6%95%B0%E6%8D%AE%E6%A0%A1%E9%AA%8C/" title="C# --- 使用 IValidatableObject + [Required] 接口进行数据校验">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">C# --- 使用 IValidatableObject + [Required] 接口进行数据校验</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/04/27/C#%20---%20MongoDB%E5%A6%82%E4%BD%95%E5%AE%89%E5%85%A8%E7%9A%84%E6%9B%BF%E6%8D%A2Collection/" title="C# --- MongoDB如何安全的替换Collection">
+                        <span class="hidden-mobile">C# --- MongoDB如何安全的替换Collection</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

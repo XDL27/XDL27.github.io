@@ -1,0 +1,838 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="XL">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="背景: 操作系统 — 线程&#x2F;进程 同步 Race Condition 问题  下面的代码会创建100个银行账户,每一个账户初始金额是1000. 然后不段的随机给另外一个账户转钱. 不管怎么转钱, 100个账户的总金额应该一直保持为10000.  但是有的输出结果总金额不到10000, 因为出现了对critical section资源竞争的问题   12345678910111213141">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java 多线程 --- 多线程的相关概念">
+<meta property="og:url" content="http://example.com/2024/04/26/Java%20%E5%A4%9A%E7%BA%BF%E7%A8%8B%20---%20%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%9A%84%E7%9B%B8%E5%85%B3%E6%A6%82%E5%BF%B5/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="背景: 操作系统 — 线程&#x2F;进程 同步 Race Condition 问题  下面的代码会创建100个银行账户,每一个账户初始金额是1000. 然后不段的随机给另外一个账户转钱. 不管怎么转钱, 100个账户的总金额应该一直保持为10000.  但是有的输出结果总金额不到10000, 因为出现了对critical section资源竞争的问题   12345678910111213141">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/2024/04/26/Java%20%E5%A4%9A%E7%BA%BF%E7%A8%8B%20---%20%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%9A%84%E7%9B%B8%E5%85%B3%E6%A6%82%E5%BF%B5/1.png">
+<meta property="og:image" content="http://example.com/2024/04/26/Java%20%E5%A4%9A%E7%BA%BF%E7%A8%8B%20---%20%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%9A%84%E7%9B%B8%E5%85%B3%E6%A6%82%E5%BF%B5/2.png">
+<meta property="og:image" content="http://example.com/2024/04/26/Java%20%E5%A4%9A%E7%BA%BF%E7%A8%8B%20---%20%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%9A%84%E7%9B%B8%E5%85%B3%E6%A6%82%E5%BF%B5/3.png">
+<meta property="og:image" content="http://example.com/2024/04/26/Java%20%E5%A4%9A%E7%BA%BF%E7%A8%8B%20---%20%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%9A%84%E7%9B%B8%E5%85%B3%E6%A6%82%E5%BF%B5/4.png">
+<meta property="article:published_time" content="2024-04-26T14:54:11.000Z">
+<meta property="article:modified_time" content="2024-04-26T15:03:37.421Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/2024/04/26/Java%20%E5%A4%9A%E7%BA%BF%E7%A8%8B%20---%20%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%9A%84%E7%9B%B8%E5%85%B3%E6%A6%82%E5%BF%B5/1.png">
+  
+  
+  
+  <title>Java 多线程 --- 多线程的相关概念 - Hexo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.7","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.2.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>XL</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Java 多线程 --- 多线程的相关概念"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-04-26 22:54" pubdate>
+          2024年4月26日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          2.1k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          18 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Java 多线程 --- 多线程的相关概念</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>背景: <a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_38803409/article/details/120763089">操作系统 — 线程&#x2F;进程 同步</a></p>
+<h1 id="Race-Condition-问题"><a href="#Race-Condition-问题" class="headerlink" title="Race Condition 问题"></a>Race Condition 问题</h1><blockquote>
+<ul>
+<li>下面的代码会创建100个银行账户,每一个账户初始金额是1000. 然后不段的随机给另外一个账户转钱.</li>
+<li>不管怎么转钱, 100个账户的总金额应该一直保持为10000. </li>
+<li>但是有的输出结果总金额不到10000, 因为出现了对critical section资源竞争的问题</li>
+</ul>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">package</span> SimpleThread;<br><span class="hljs-keyword">import</span> java.util.*;<br><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">Bank</span> &#123;<br>	<span class="hljs-keyword">private</span> <span class="hljs-keyword">final</span> <span class="hljs-type">double</span>[] accounts;<br><br>	<span class="hljs-keyword">public</span> <span class="hljs-title function_">Bank</span><span class="hljs-params">(<span class="hljs-type">int</span> n, <span class="hljs-type">double</span> initialBalance)</span> &#123;<br>		accounts = <span class="hljs-keyword">new</span> <span class="hljs-title class_">double</span>[n];<br>		Arrays.fill(accounts, initialBalance);<br>	&#125;<br><br>	<span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">transfer</span><span class="hljs-params">(<span class="hljs-type">int</span> from, <span class="hljs-type">int</span> to, <span class="hljs-type">double</span> amount)</span> &#123;<br>		<span class="hljs-keyword">if</span> (accounts[from] &lt; amount) <span class="hljs-keyword">return</span>;<br>		System.out.print(Thread.currentThread());<br>		accounts[from] -= amount;<br>		System.out.printf(<span class="hljs-string">&quot; %10.2f from %d to %d&quot;</span>, amount, from, to);<br>		accounts[to] += amount;<br>		System.out.printf(<span class="hljs-string">&quot; Total Balance: %10.2f%n&quot;</span>, getTotalBalance());<br>	&#125;<br>	<br>	<span class="hljs-keyword">public</span> <span class="hljs-type">double</span> <span class="hljs-title function_">getTotalBalance</span><span class="hljs-params">()</span> &#123;<br>		<span class="hljs-type">double</span> <span class="hljs-variable">sum</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>;<br>		<br>		<span class="hljs-keyword">for</span> (<span class="hljs-type">double</span> a : accounts)<br>		sum += a;<br>		<br>		<span class="hljs-keyword">return</span> sum;<br>	&#125;<br>	<br>	<span class="hljs-keyword">public</span> <span class="hljs-type">int</span> <span class="hljs-title function_">size</span><span class="hljs-params">()</span> &#123;<br>		<span class="hljs-keyword">return</span> accounts.length;<br>	&#125;<br> &#125;<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">package</span> SimpleThread;<br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">UnsynchBankTest</span> &#123;<br>	<span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> <span class="hljs-type">int</span> <span class="hljs-variable">NACCOUNTS</span> <span class="hljs-operator">=</span> <span class="hljs-number">100</span>;<br>	<span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> <span class="hljs-type">double</span> <span class="hljs-variable">INITIAL_BALANCE</span> <span class="hljs-operator">=</span> <span class="hljs-number">1000</span>;<br>	<span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> <span class="hljs-type">double</span> <span class="hljs-variable">MAX_AMOUNT</span> <span class="hljs-operator">=</span> <span class="hljs-number">1000</span>;<br>	<span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> <span class="hljs-type">int</span> <span class="hljs-variable">DELAY</span> <span class="hljs-operator">=</span> <span class="hljs-number">10</span>;<br>	<br>	<span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String[] args)</span><br>	&#123;<br>		<span class="hljs-type">Bank</span> <span class="hljs-variable">bank</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Bank</span>(NACCOUNTS, INITIAL_BALANCE);<br>		<span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> <span class="hljs-variable">i</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>; i &lt; NACCOUNTS; i++) &#123;<br>			<span class="hljs-type">int</span> <span class="hljs-variable">fromAccount</span> <span class="hljs-operator">=</span> i;<br>			<span class="hljs-type">Runnable</span> <span class="hljs-variable">r</span> <span class="hljs-operator">=</span> () -&gt; &#123;<br>				<span class="hljs-keyword">try</span>&#123;<br>					<span class="hljs-keyword">while</span> (<span class="hljs-literal">true</span>) &#123;<br>						<span class="hljs-type">int</span> <span class="hljs-variable">toAccount</span> <span class="hljs-operator">=</span> (<span class="hljs-type">int</span>) (bank.size() * Math.random());<br>						<span class="hljs-type">double</span> <span class="hljs-variable">amount</span> <span class="hljs-operator">=</span> MAX_AMOUNT * Math.random();<br>						bank.transfer(fromAccount, toAccount, amount);<br>						Thread.sleep((<span class="hljs-type">int</span>) (DELAY * Math.random()));<br>					&#125;<br>				&#125;<br>				<span class="hljs-keyword">catch</span> (InterruptedException e) &#123;<br>					<br>				&#125;<br>			&#125;;<br>			<span class="hljs-type">Thread</span> <span class="hljs-variable">t</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Thread</span>(r);<br>			t.start();<br>		&#125;<br>	&#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p><img src="/2024/04/26/Java%20%E5%A4%9A%E7%BA%BF%E7%A8%8B%20---%20%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%9A%84%E7%9B%B8%E5%85%B3%E6%A6%82%E5%BF%B5/1.png" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></p>
+<blockquote>
+<ul>
+<li>因为 <code>accounts[to] += amount;</code> 和 <code>accounts[from] -= amount;</code>不是原子操作, 也就是此行代码分为三条指令<blockquote>
+<ul>
+<li>step1: 将accounts[i] 放入寄存器</li>
+<li>step2: 将amount增加或者减少</li>
+<li>step3: 将结果放回accounts[i]</li>
+</ul>
+</blockquote>
+</li>
+<li>假设线程1执行完前两步之后被打断, 线程2执行全部三个步骤, 然后线程1继续执行第三步, 则线程2的数据会被线程1的第三步覆盖</li>
+</ul>
+</blockquote>
+<p><img src="/2024/04/26/Java%20%E5%A4%9A%E7%BA%BF%E7%A8%8B%20---%20%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%9A%84%E7%9B%B8%E5%85%B3%E6%A6%82%E5%BF%B5/2.png" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></p>
+<h1 id="并发编程的性质-—-原子性-可见性-有序性"><a href="#并发编程的性质-—-原子性-可见性-有序性" class="headerlink" title="并发编程的性质 — 原子性, 可见性, 有序性"></a>并发编程的性质 — 原子性, 可见性, 有序性</h1><p><strong>原子性</strong></p>
+<blockquote>
+<ul>
+<li>一个操作或者多个操作 要么全部执行并且执行的过程不会被任何因素打断，要么就都不执行。比如上面的例子就没有保证原子性</li>
+</ul>
+</blockquote>
+<blockquote>
+<ul>
+<li>注意: 原子操作 + 原子操作 !&#x3D; 原子操作</li>
+<li>如下: 如果a是原子操作, b也是原子操作 但是 a + b 不是原子操作</li>
+</ul>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs java">a = <span class="hljs-number">1</span><br>b = <span class="hljs-number">2</span><br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<ul>
+<li>在 Java 语言中, 除去 long 类型和double 类型, 剩下所有类型 (包括基础类型和引用类型) 的 写(write) 操作都是原子操作.<blockquote>
+<ul>
+<li>写入是原子操作: byte, boolean, short, char, float, int 和其他引用操作</li>
+<li>写入不是原子操作: long, double</li>
+</ul>
+</blockquote>
+</li>
+<li>在 Java 语言中, 所有类型的读取操作都是原子操作</li>
+</ul>
+</blockquote>
+<p><strong>可见性</strong><br><img src="/2024/04/26/Java%20%E5%A4%9A%E7%BA%BF%E7%A8%8B%20---%20%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%9A%84%E7%9B%B8%E5%85%B3%E6%A6%82%E5%BF%B5/3.png" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></p>
+<blockquote>
+<ul>
+<li>由于JVM运行程序的实体是线程，而每个线程创建时JVM都会为其创建一个工作内存（有些地方称为栈空间）<blockquote>
+<ul>
+<li>工作内存是每个线程的私有数据区域，而Java内存模型中规定所有变量都存储在主内存</li>
+<li>主内存是共享内存区域，所有线程都可以访问.</li>
+</ul>
+</blockquote>
+</li>
+<li>线程对变量的操作（读取赋值等）必须在工作内存中进行<blockquote>
+<ul>
+<li>首先要将变量从主内存拷贝到自己的工作内存空间，然后对变量进行操作，操作完成后再将变量写会主内存</li>
+<li>不能直接操作主内存中的变量，各个线程中的工作内存中存储着主内存中的变量副本拷贝，因此不同的线程间无法访问对方的工作内存，线程间的通信（传值）必须通过主内存来完成</li>
+</ul>
+</blockquote>
+</li>
+<li>当一个线程修改了共享变量的值时，其他线程能够立即得知这个修改, 这个就是可见性</li>
+</ul>
+</blockquote>
+<p><strong>有序性</strong></p>
+<blockquote>
+<ul>
+<li>当发生指令重排时, 线程就失去了有序性</li>
+<li>在源代码顺序与程序执行顺序不一致的情况下, 就发生了指令重排序</li>
+<li>编译器出于性能的考虑, 在其认为不影响程序正确性的情况下可能会对源代码顺序进行调整, 从而造成程序顺序与相应的源代码顺序不一致.</li>
+</ul>
+</blockquote>
+<h1 id="上下文切换-Context-Switch"><a href="#上下文切换-Context-Switch" class="headerlink" title="上下文切换 (Context Switch)"></a>上下文切换 (Context Switch)</h1><blockquote>
+<ul>
+<li>当线程切入和切出操作系统的时候需要保存和恢复相应的线程的进度信息(如程序运行到什么程度了,计算的中间结果以及执行到了哪条指令) </li>
+<li>这个进度的信息被称为上下文 (Context). 切换的过程叫做上下文切换(Context Switch)</li>
+<li>一个线程的生命周期状态在 Runnable 状态 与 非Runnable状态之 (包括Blocked,  Waiting) 之间切换的过程就是一个上下文切换的过程</li>
+</ul>
+</blockquote>
+<p><strong>上下文切换的原因 包括主动切换和被动切换</strong></p>
+<blockquote>
+<ul>
+<li>主动切换的原因包括以下<blockquote>
+<ul>
+<li>Thread.sleep</li>
+<li>Object.wait()</li>
+<li>Thread.yield()</li>
+<li>Thread.join()</li>
+<li>等</li>
+</ul>
+</blockquote>
+</li>
+<li>被动切换的原因包括<blockquote>
+<ul>
+<li>线程的时间片用完</li>
+<li>优先级低的线程被优先级高的线程切换</li>
+<li>Java虚拟机也会导致被动上下文切换, 因为垃圾回收器可能需要暂停所有线程才能完成垃圾回收</li>
+</ul>
+</blockquote>
+</li>
+</ul>
+</blockquote>
+<h1 id="线程的一些故障-—-死锁-活锁-饥饿"><a href="#线程的一些故障-—-死锁-活锁-饥饿" class="headerlink" title="线程的一些故障 — 死锁, 活锁, 饥饿"></a>线程的一些故障 — 死锁, 活锁, 饥饿</h1><h2 id="死锁-Deadlock"><a href="#死锁-Deadlock" class="headerlink" title="死锁 (Deadlock)"></a>死锁 (Deadlock)</h2><blockquote>
+<ul>
+<li>死锁: 是指两个或两个以上的进程或线程在执行过程中，因争夺资源而造成的一种互相等待的现象，若无外力作用，它们都将无法推进下去。此时称系统处于死锁状态或系统产生了死锁，这些永远在互相等待的进程称为死锁进程</li>
+</ul>
+</blockquote>
+<blockquote>
+<ul>
+<li>死锁的发生条件: <blockquote>
+<ul>
+<li>当前进程或线程拥有其他进程或线程需要的资源</li>
+<li>当前进程或线程等待其他进程或线程已拥有的资源</li>
+<li>都不放弃自己拥有的资源,也就是不能被其他进程或线程剥夺，只能在使用完以后由自己释放</li>
+</ul>
+</blockquote>
+</li>
+</ul>
+</blockquote>
+<p><strong>Example 1:</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs c">mutex m<br>function &#123;<br>	lock(m) <span class="hljs-comment">//成功拿到锁</span><br>	lock(m) <span class="hljs-comment">//拿不到锁，因为已经被自己拿了，所以会无限等待下去</span><br>	<span class="hljs-comment">//critical section</span><br>	unlock(m)<br>	unlock(m)<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p><strong>Example 2:</strong><br><img src="/2024/04/26/Java%20%E5%A4%9A%E7%BA%BF%E7%A8%8B%20---%20%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%9A%84%E7%9B%B8%E5%85%B3%E6%A6%82%E5%BF%B5/4.png" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></p>
+<blockquote>
+<ul>
+<li>task A成功拿到M1的锁，同时task B成功拿到M2的锁</li>
+<li>task A等待获取M2的锁，同时task B等待获取M1的锁<blockquote>
+<ul>
+<li>task A只有获得M2的锁才能往下继续然后释放M1的锁</li>
+<li>task B只有获得M1的锁才能往下继续然后释放M2的锁</li>
+</ul>
+</blockquote>
+</li>
+</ul>
+</blockquote>
+<h2 id="活锁-Livelock"><a href="#活锁-Livelock" class="headerlink" title="活锁(Livelock)"></a>活锁(Livelock)</h2><blockquote>
+<ul>
+<li>活锁是不同线程占用对方所需要的资源, 导致任何线程都无法继续向前运行, 但是没有一个线程处于block状态. 而每个线程一遍又一遍的不断尝试获取资源并不断消耗CPU资源.</li>
+</ul>
+</blockquote>
+<p>  <strong>Example 1:</strong></p>
+<blockquote>
+<ul>
+<li>一个系统可以运行的进程总量由process table有多少个entry决定. </li>
+<li>如果一个process table满了会导致一个进程fork子进程失败. 而失败以后父进程不会进入阻塞状态, 而是等待一段时间后再次fork子进程. </li>
+<li>假设一个系统有100个entry. 10个父进程需要各创建12个子进程, 当新创建90个进程之后, process table被占满. 而10个父进程会不断的重新fork子进程.</li>
+</ul>
+</blockquote>
+<p><strong>Example 2:</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">CommonResource</span> &#123;<br>    <span class="hljs-keyword">private</span> Worker owner;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-title function_">CommonResource</span> <span class="hljs-params">(Worker d)</span> &#123;<br>        owner = d;<br>    &#125;<br><br>    <span class="hljs-keyword">public</span> Worker <span class="hljs-title function_">getOwner</span> <span class="hljs-params">()</span> &#123;<br>        <span class="hljs-keyword">return</span> owner;<br>    &#125;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">synchronized</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">setOwner</span> <span class="hljs-params">(Worker d)</span> &#123;<br>        owner = d;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">Worker</span> &#123;<br>    <span class="hljs-keyword">private</span> String name;<br>    <span class="hljs-keyword">private</span> <span class="hljs-type">boolean</span> active;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-title function_">Worker</span> <span class="hljs-params">(String name, <span class="hljs-type">boolean</span> active)</span> &#123;<br>        <span class="hljs-built_in">this</span>.name = name;<br>        <span class="hljs-built_in">this</span>.active = active;<br>    &#125;<br><br>    <span class="hljs-keyword">public</span> String <span class="hljs-title function_">getName</span> <span class="hljs-params">()</span> &#123;<br>        <span class="hljs-keyword">return</span> name;<br>    &#125;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-type">boolean</span> <span class="hljs-title function_">isActive</span> <span class="hljs-params">()</span> &#123;<br>        <span class="hljs-keyword">return</span> active;<br>    &#125;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">synchronized</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">work</span> <span class="hljs-params">(CommonResource commonResource, Worker otherWorker)</span> &#123;<br>        <span class="hljs-keyword">while</span> (active) &#123;<br>            <span class="hljs-comment">// wait for the resource to become available.</span><br>            <span class="hljs-keyword">if</span> (commonResource.getOwner() != <span class="hljs-built_in">this</span>) &#123;<br>                <span class="hljs-keyword">try</span> &#123;<br>                    wait(<span class="hljs-number">10</span>);<br>                &#125; <span class="hljs-keyword">catch</span> (InterruptedException e) &#123;<br>                   <span class="hljs-comment">//ignore</span><br>                &#125;<br>                <span class="hljs-keyword">continue</span>;<br>            &#125;<br><br>            <span class="hljs-comment">// If other worker is also active let it do it&#x27;s work first</span><br>            <span class="hljs-keyword">if</span> (otherWorker.isActive()) &#123;<br>                System.out.println(getName() +<br>                            <span class="hljs-string">&quot; : handover the resource to the worker &quot;</span> +<br>                                                       otherWorker.getName());<br>                commonResource.setOwner(otherWorker);<br>                <span class="hljs-keyword">continue</span>;<br>            &#125;<br><br>            <span class="hljs-comment">//now use the commonResource</span><br>            System.out.println(getName() + <span class="hljs-string">&quot;: working on the common resource&quot;</span>);<br>            active = <span class="hljs-literal">false</span>;<br>            commonResource.setOwner(otherWorker);<br>        &#125;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">Livelock</span> &#123;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">main</span> <span class="hljs-params">(String[] args)</span> &#123;<br>        <span class="hljs-keyword">final</span> <span class="hljs-type">Worker</span> <span class="hljs-variable">worker1</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Worker</span>(<span class="hljs-string">&quot;Worker 1 &quot;</span>, <span class="hljs-literal">true</span>);<br>        <span class="hljs-keyword">final</span> <span class="hljs-type">Worker</span> <span class="hljs-variable">worker2</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Worker</span>(<span class="hljs-string">&quot;Worker 2&quot;</span>, <span class="hljs-literal">true</span>);<br><br>        <span class="hljs-keyword">final</span> <span class="hljs-type">CommonResource</span> <span class="hljs-variable">s</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">CommonResource</span>(worker1);<br><br>        <span class="hljs-keyword">new</span> <span class="hljs-title class_">Thread</span>(() -&gt; &#123;<br>            worker1.work(s, worker2);<br>        &#125;).start();<br><br>        <span class="hljs-keyword">new</span> <span class="hljs-title class_">Thread</span>(() -&gt; &#123;<br>            worker2.work(s, worker1);<br>        &#125;).start();<br>    &#125;<br>&#125;<br> <br></code></pre></td></tr></table></figure>
+<blockquote>
+<ul>
+<li>以上代码当两个线程都是active时, 会互相谦让对方, 然后不断重新尝试, 进入livelock</li>
+</ul>
+</blockquote>
+<p>output:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs java">Worker <span class="hljs-number">1</span>  : handing over the resource to the worker: Worker <span class="hljs-number">2</span><br>Worker <span class="hljs-number">2</span> : handing over the resource to the worker: Worker <span class="hljs-number">1</span><br>Worker <span class="hljs-number">1</span>  : handing over the resource to the worker: Worker <span class="hljs-number">2</span><br>Worker <span class="hljs-number">2</span> : handing over the resource to the worker: Worker <span class="hljs-number">1</span><br>Worker <span class="hljs-number">1</span>  : handing over the resource to the worker: Worker <span class="hljs-number">2</span><br>Worker <span class="hljs-number">2</span> : handing over the resource to the worker: Worker <span class="hljs-number">1</span><br></code></pre></td></tr></table></figure>
+
+<h2 id="死锁和活锁的区别"><a href="#死锁和活锁的区别" class="headerlink" title="死锁和活锁的区别"></a>死锁和活锁的区别</h2><blockquote>
+<ul>
+<li>活锁和死锁非常的像, 都是线程互相持有自己所需要的资源导致程序不能正常往下运行</li>
+<li>区别是死锁的线程会进入等待状态, 也就是block状态</li>
+<li>而活锁的进程不会进入等待状态, 而是会不断的尝试运行, 不断的消耗CPU资源.</li>
+</ul>
+</blockquote>
+<h2 id="饥饿-Starvation"><a href="#饥饿-Starvation" class="headerlink" title="饥饿(Starvation)"></a>饥饿(Starvation)</h2><blockquote>
+<ul>
+<li>是指一个可运行的进程尽管能继续执行，但被调度器无限期地忽视，而不能被调度执行的情况</li>
+</ul>
+</blockquote>
+<p><strong>Example:</strong></p>
+<blockquote>
+<ul>
+<li>如果进程按照优先级运行, 也就是先运行高优先级的进程</li>
+<li>那么如果一直有新的高优先级的进程被创建, 则低优先级的进程永远不会被执行, 进入饥饿状态</li>
+</ul>
+</blockquote>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Java-SE/" class="category-chain-item">Java SE</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/Java-SE/Java-%E5%A4%9A%E7%BA%BF%E7%A8%8B/" class="category-chain-item">Java --- 多线程</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Java 多线程 --- 多线程的相关概念</div>
+      <div>http://example.com/2024/04/26/Java 多线程 --- 多线程的相关概念/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>XL</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年4月26日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/04/26/Java%20%E5%A4%9A%E7%BA%BF%E7%A8%8B%20---%20%E7%BB%88%E6%AD%A2%E7%BA%BF%E7%A8%8B%20Terminate%20Threads/" title="Java 多线程 --- 终止线程 Terminate Threads">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Java 多线程 --- 终止线程 Terminate Threads</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/04/26/Java%20%E5%A4%9A%E7%BA%BF%E7%A8%8B%20---%20%E9%94%81%E7%9A%84%E6%A6%82%E5%BF%B5%E5%92%8C%E7%B1%BB%E5%9E%8B%E5%88%92%E5%88%86/" title="Java 多线程 --- 锁的概念和类型划分">
+                        <span class="hidden-mobile">Java 多线程 --- 锁的概念和类型划分</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

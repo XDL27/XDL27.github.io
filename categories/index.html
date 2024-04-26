@@ -1,0 +1,1203 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="John Doe">
+  <meta name="keywords" content="">
+  
+    <meta property="og:type" content="website">
+<meta property="og:title" content="分类">
+<meta property="og:url" content="http://example.com/categories/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>分类 - Hexo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.7","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.2.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 60vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>XL</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="分类"></span>
+          
+        </div>
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      <div class="container nopadding-x-md">
+        <div id="board"
+          >
+          
+          <div class="container">
+            <div class="row">
+              <div class="col-12 col-md-10 m-auto">
+                
+
+
+
+
+
+<div class="category-list">
+  
+  
+    
+    
+    
+    <div class="category row nomargin-x">
+      <a class="category-item collapsed
+          list-group-item category-item-action col-10 col-md-11 col-xm-11" title="Java SE"
+        id="heading-bce6932e9fc609db4968e17dd223391e" role="tab" data-toggle="collapse" href="#collapse-bce6932e9fc609db4968e17dd223391e"
+        aria-expanded="false"
+      >
+        Java SE
+        <span class="list-group-count"></span>
+        <i class="iconfont icon-arrowright"></i>
+      </a>
+      
+        <a href="/categories/Java-SE/" class="category-count col-2 col-md-1 col-xm-1">
+          <i class="iconfont icon-articles"></i>
+          <span>38</span>
+        </a>
+      
+      <div class="category-collapse collapse " id="collapse-bce6932e9fc609db4968e17dd223391e"
+           role="tabpanel" aria-labelledby="heading-bce6932e9fc609db4968e17dd223391e">
+        
+        
+          
+          
+  <div class="category-post-list">
+    
+    
+  </div>
+
+          
+  
+    
+    
+    
+    <div class="category-sub row nomargin-x">
+      <a class="category-subitem collapsed
+          list-group-item category-item-action col-10 col-md-11 col-xm-11" title="Java --- 基础/封装/多态"
+        id="heading-99140ffcbccf05e81cbbd563e7a73172" role="tab" data-toggle="collapse" href="#collapse-99140ffcbccf05e81cbbd563e7a73172"
+        aria-expanded="false"
+      >
+        Java --- 基础/封装/多态
+        <span class="list-group-count"></span>
+        <i class="iconfont icon-arrowright"></i>
+      </a>
+      
+        <a href="/categories/Java-SE/Java-%E5%9F%BA%E7%A1%80-%E5%B0%81%E8%A3%85-%E5%A4%9A%E6%80%81/" class="category-count col-2 col-md-1 col-xm-1">
+          <i class="iconfont icon-articles"></i>
+          <span>16</span>
+        </a>
+      
+      <div class="category-collapse collapse " id="collapse-99140ffcbccf05e81cbbd563e7a73172"
+           role="tabpanel" aria-labelledby="heading-99140ffcbccf05e81cbbd563e7a73172">
+        
+        
+          
+  <div class="category-post-list">
+    
+    
+      
+      
+        <a href="/2024/04/26/Java%E5%9F%BA%E7%A1%80%20---%20%E4%BB%A3%E7%A0%81%E5%9D%97%E4%BB%A5%E5%8F%8A%E6%89%A7%E8%A1%8C%E9%A1%BA%E5%BA%8F/" title="Java基础 --- 代码块以及执行顺序"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">Java基础 --- 代码块以及执行顺序</span>
+        </a>
+      
+    
+      
+      
+        <a href="/2024/04/26/Java%E5%9F%BA%E7%A1%80%20---%20%E6%B3%9B%E5%9E%8B%20Generics/" title="Java基础 --- 泛型 Generics"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">Java基础 --- 泛型 Generics</span>
+        </a>
+      
+    
+      
+      
+        <a href="/2024/04/26/Java%E5%9F%BA%E7%A1%80%20---%20%E5%86%85%E9%83%A8%E7%B1%BB%20Inner%20Class/" title="Java基础 --- 内部类 Inner Class"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">Java基础 --- 内部类 Inner Class</span>
+        </a>
+      
+    
+      
+      
+        <a href="/2024/04/26/Java%20%E5%9F%BA%E7%A1%80%20---%20%E5%BC%82%E5%B8%B8%20Exception/" title="Java 基础 --- 异常 Exception"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">Java 基础 --- 异常 Exception</span>
+        </a>
+      
+    
+      
+      
+        <a href="/2024/04/26/Java%E5%9F%BA%E7%A1%80%20---%20%E8%BD%AC%E5%9E%8B%20Casting/" title="Java基础--- 转型 Casting"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">Java基础--- 转型 Casting</span>
+        </a>
+      
+    
+      
+      
+        <a href="/2024/04/26/Java%E5%9F%BA%E7%A1%80%20---%20%E5%8C%85%E8%A3%85%E7%B1%BB%E5%92%8C%E8%87%AA%E5%8A%A8%E6%8B%86%E8%A3%85%E7%AE%B1%20Wrapper%20Class%20and%20Autoboxing/" title="Java基础 --- 包装类和自动拆装箱 Wrapper Class and Autoboxing"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">Java基础 --- 包装类和自动拆装箱 Wrapper Class and Autoboxing</span>
+        </a>
+      
+    
+      
+      
+        <a href="/2024/04/26/Java%E5%9F%BA%E7%A1%80%20---%20final%E5%85%B3%E9%94%AE%E5%AD%97/" title="Java基础 --- final关键字"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">Java基础 --- final关键字</span>
+        </a>
+      
+    
+      
+      
+        <a href="/2024/04/26/Java%E5%9F%BA%E7%A1%80%20---%20static%E5%85%B3%E9%94%AE%E5%AD%97/" title="Java基础 --- static关键字"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">Java基础 --- static关键字</span>
+        </a>
+      
+    
+      
+      
+        <a href="/2024/04/26/Java%E5%9F%BA%E7%A1%80%20---%20%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0%E5%92%8Csuper%E5%85%B3%E9%94%AE%E5%AD%97/" title="Java基础 --- 构造函数和super关键字"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">Java基础 --- 构造函数和super关键字</span>
+        </a>
+      
+    
+      
+      
+        <a href="/2024/04/26/Java%E5%9F%BA%E7%A1%80%20---%20%E9%87%8D%E8%BD%BD%E5%92%8C%E9%87%8D%E5%86%99%20Overloading%20and%20Overriding/" title="Java基础 --- 重载和重写 Overloading and Overriding"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">Java基础 --- 重载和重写 Overloading and Overriding</span>
+        </a>
+      
+    
+      
+      
+        <a href="/categories/Java-SE/Java-%E5%9F%BA%E7%A1%80-%E5%B0%81%E8%A3%85-%E5%A4%9A%E6%80%81/" class="list-group-item list-group-item-action">
+          <span class="category-post">More...</span>
+        </a>
+        
+  </div>
+
+        
+      </div>
+    </div>
+  
+    
+    
+    
+    <div class="category-sub row nomargin-x">
+      <a class="category-subitem collapsed
+          list-group-item category-item-action col-10 col-md-11 col-xm-11" title="Java --- 多线程"
+        id="heading-a857cf4cce1801eb9eb59cbd22efd1b2" role="tab" data-toggle="collapse" href="#collapse-a857cf4cce1801eb9eb59cbd22efd1b2"
+        aria-expanded="false"
+      >
+        Java --- 多线程
+        <span class="list-group-count"></span>
+        <i class="iconfont icon-arrowright"></i>
+      </a>
+      
+        <a href="/categories/Java-SE/Java-%E5%A4%9A%E7%BA%BF%E7%A8%8B/" class="category-count col-2 col-md-1 col-xm-1">
+          <i class="iconfont icon-articles"></i>
+          <span>12</span>
+        </a>
+      
+      <div class="category-collapse collapse " id="collapse-a857cf4cce1801eb9eb59cbd22efd1b2"
+           role="tabpanel" aria-labelledby="heading-a857cf4cce1801eb9eb59cbd22efd1b2">
+        
+        
+          
+  <div class="category-post-list">
+    
+    
+      
+      
+        <a href="/2024/04/26/Java%20%E5%A4%9A%E7%BA%BF%E7%A8%8B%20---%20%E5%88%9B%E5%BB%BA%E7%BA%BF%E7%A8%8B,%20%E7%BA%BF%E7%A8%8B%E7%8A%B6%E6%80%81/" title="Java 多线程 --- 创建线程,  线程状态"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">Java 多线程 --- 创建线程,  线程状态</span>
+        </a>
+      
+    
+      
+      
+        <a href="/2024/04/26/Java%20%E5%A4%9A%E7%BA%BF%E7%A8%8B%20---%20%E7%BB%88%E6%AD%A2%E7%BA%BF%E7%A8%8B%20Terminate%20Threads/" title="Java 多线程 --- 终止线程 Terminate Threads"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">Java 多线程 --- 终止线程 Terminate Threads</span>
+        </a>
+      
+    
+      
+      
+        <a href="/2024/04/26/Java%20%E5%A4%9A%E7%BA%BF%E7%A8%8B%20---%20%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%9A%84%E7%9B%B8%E5%85%B3%E6%A6%82%E5%BF%B5/" title="Java 多线程 --- 多线程的相关概念"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">Java 多线程 --- 多线程的相关概念</span>
+        </a>
+      
+    
+      
+      
+        <a href="/2024/04/26/Java%20%E5%A4%9A%E7%BA%BF%E7%A8%8B%20---%20%E9%94%81%E7%9A%84%E6%A6%82%E5%BF%B5%E5%92%8C%E7%B1%BB%E5%9E%8B%E5%88%92%E5%88%86/" title="Java 多线程 --- 锁的概念和类型划分"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">Java 多线程 --- 锁的概念和类型划分</span>
+        </a>
+      
+    
+      
+      
+        <a href="/2024/04/26/Java%20%E5%A4%9A%E7%BA%BF%E7%A8%8B%20---%20%E7%BA%BF%E7%A8%8B%E5%90%8C%E6%AD%A5%E4%B8%8E%E7%BA%BF%E7%A8%8B%E5%8D%8F%E4%BD%9C%E7%9A%84%E5%8C%BA%E5%88%AB/" title="Java 多线程 --- 线程同步与线程协作的区别"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">Java 多线程 --- 线程同步与线程协作的区别</span>
+        </a>
+      
+    
+      
+      
+        <a href="/2024/04/26/Java%20%E5%A4%9A%E7%BA%BF%E7%A8%8B%20---%20%E7%BA%BF%E7%A8%8B%E5%90%8C%E6%AD%A5%20volatile%E5%85%B3%E9%94%AE%E5%AD%97/" title="Java 多线程 --- 线程同步 volatile关键字"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">Java 多线程 --- 线程同步 volatile关键字</span>
+        </a>
+      
+    
+      
+      
+        <a href="/2024/04/26/Java%20%E5%A4%9A%E7%BA%BF%E7%A8%8B%20---%20%E7%BA%BF%E7%A8%8B%E5%90%8C%E6%AD%A5%20%E5%86%85%E9%83%A8%E9%94%81synchronized/" title="Java 多线程 --- 线程同步 内部锁synchronized"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">Java 多线程 --- 线程同步 内部锁synchronized</span>
+        </a>
+      
+    
+      
+      
+        <a href="/2024/04/26/Java%20%E5%A4%9A%E7%BA%BF%E7%A8%8B%20---%20%E7%BA%BF%E7%A8%8B%E5%90%8C%E6%AD%A5%20%E6%98%BE%E5%BC%8F%E9%94%81ReentrantLock/" title="Java 多线程 --- 线程同步 显式锁ReentrantLock"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">Java 多线程 --- 线程同步 显式锁ReentrantLock</span>
+        </a>
+      
+    
+      
+      
+        <a href="/2024/04/26/Java%20%E5%A4%9A%E7%BA%BF%E7%A8%8B%20---%20%E7%BA%BF%E7%A8%8B%E5%90%8C%E6%AD%A5%20CAS%E6%9C%BA%E5%88%B6%E4%B8%8EJava%E5%8E%9F%E5%AD%90%E7%B1%BB/" title="Java 多线程 --- 线程同步 CAS机制与Java原子类"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">Java 多线程 --- 线程同步 CAS机制与Java原子类</span>
+        </a>
+      
+    
+      
+      
+        <a href="/2024/04/26/Java%20%E5%A4%9A%E7%BA%BF%E7%A8%8B%20---%20%E7%BA%BF%E7%A8%8B%E5%8D%8F%E4%BD%9C%20wait%20and%20notify/" title="Java 多线程 --- 线程协作 wait and notify"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">Java 多线程 --- 线程协作 wait and notify</span>
+        </a>
+      
+    
+      
+      
+        <a href="/categories/Java-SE/Java-%E5%A4%9A%E7%BA%BF%E7%A8%8B/" class="list-group-item list-group-item-action">
+          <span class="category-post">More...</span>
+        </a>
+        
+  </div>
+
+        
+      </div>
+    </div>
+  
+    
+    
+    
+    <div class="category-sub row nomargin-x">
+      <a class="category-subitem collapsed
+          list-group-item category-item-action col-10 col-md-11 col-xm-11" title="Java --- 集合Collection"
+        id="heading-a9ffc8f224af2deb8ea303b8cd20d32b" role="tab" data-toggle="collapse" href="#collapse-a9ffc8f224af2deb8ea303b8cd20d32b"
+        aria-expanded="false"
+      >
+        Java --- 集合Collection
+        <span class="list-group-count"></span>
+        <i class="iconfont icon-arrowright"></i>
+      </a>
+      
+        <a href="/categories/Java-SE/Java-%E9%9B%86%E5%90%88Collection/" class="category-count col-2 col-md-1 col-xm-1">
+          <i class="iconfont icon-articles"></i>
+          <span>6</span>
+        </a>
+      
+      <div class="category-collapse collapse " id="collapse-a9ffc8f224af2deb8ea303b8cd20d32b"
+           role="tabpanel" aria-labelledby="heading-a9ffc8f224af2deb8ea303b8cd20d32b">
+        
+        
+          
+  <div class="category-post-list">
+    
+    
+      
+      
+        <a href="/2024/04/26/Java%20%E9%9B%86%E5%90%88%20---%20Collection%20%E6%A1%86%E6%9E%B6/" title="Java 集合 --- Collection 框架"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">Java 集合 --- Collection 框架</span>
+        </a>
+      
+    
+      
+      
+        <a href="/2024/04/26/Java%20%E9%9B%86%E5%90%88%20---%20HashMap%E7%9A%84%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86/" title="Java 集合 --- HashMap的底层原理"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">Java 集合 --- HashMap的底层原理</span>
+        </a>
+      
+    
+      
+      
+        <a href="/2024/04/26/Java%20%E9%9B%86%E5%90%88%20---%20String,%20StringBuilder,%20StringBuffer/" title="Java 集合 --- String, StringBuilder, StringBuffer"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">Java 集合 --- String, StringBuilder, StringBuffer</span>
+        </a>
+      
+    
+      
+      
+        <a href="/2024/04/26/Java%20%E9%9B%86%E5%90%88%20---%20%E5%A6%82%E4%BD%95%E9%81%8D%E5%8E%86Map/" title="Java 集合 --- 如何遍历Map"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">Java 集合 --- 如何遍历Map</span>
+        </a>
+      
+    
+      
+      
+        <a href="/2024/04/26/Java%20%E9%9B%86%E5%90%88%20---%20Comparable%20%E5%92%8C%20Comparator/" title="Java 集合 --- Comparable 和 Comparator"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">Java 集合 --- Comparable 和 Comparator</span>
+        </a>
+      
+    
+      
+      
+        <a href="/2024/04/26/Java%20%E9%9B%86%E5%90%88%20---%20Array%E5%92%8CList%E4%BA%92%E7%9B%B8%E8%BD%AC%E6%8D%A2/" title="Java 集合 --- Array和List互相转换"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">Java 集合 --- Array和List互相转换</span>
+        </a>
+      
+    
+  </div>
+
+        
+      </div>
+    </div>
+  
+    
+    
+    
+    <div class="category-sub row nomargin-x">
+      <a class="category-subitem collapsed
+          list-group-item category-item-action col-10 col-md-11 col-xm-11" title="Java --- 高级特性"
+        id="heading-a1051120a273c230d7c1d03d1ea01723" role="tab" data-toggle="collapse" href="#collapse-a1051120a273c230d7c1d03d1ea01723"
+        aria-expanded="false"
+      >
+        Java --- 高级特性
+        <span class="list-group-count"></span>
+        <i class="iconfont icon-arrowright"></i>
+      </a>
+      
+        <a href="/categories/Java-SE/Java-%E9%AB%98%E7%BA%A7%E7%89%B9%E6%80%A7/" class="category-count col-2 col-md-1 col-xm-1">
+          <i class="iconfont icon-articles"></i>
+          <span>4</span>
+        </a>
+      
+      <div class="category-collapse collapse " id="collapse-a1051120a273c230d7c1d03d1ea01723"
+           role="tabpanel" aria-labelledby="heading-a1051120a273c230d7c1d03d1ea01723">
+        
+        
+          
+  <div class="category-post-list">
+    
+    
+      
+      
+        <a href="/2024/04/26/Java%E5%9F%BA%E7%A1%80%20---%20%E6%B3%A8%E8%A7%A3%20Annotation/" title="Java基础 --- 注解 Annotation"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">Java基础 --- 注解 Annotation</span>
+        </a>
+      
+    
+      
+      
+        <a href="/2024/04/26/Java%E5%9F%BA%E7%A1%80%20---%20%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86%20Proxy/" title="Java基础 --- 动态代理 Proxy"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">Java基础 --- 动态代理 Proxy</span>
+        </a>
+      
+    
+      
+      
+        <a href="/2024/04/26/Java%E5%9F%BA%E7%A1%80%20---%20%E5%8F%8D%E5%B0%84%E6%9C%BA%E5%88%B6%20Reflection/" title="Java基础 --- 反射机制 Reflection"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">Java基础 --- 反射机制 Reflection</span>
+        </a>
+      
+    
+      
+      
+        <a href="/2024/04/26/%E6%95%B0%E6%8D%AE%E5%BA%93JDBC%20---%20Java%20Database%20Connectivity/" title="数据库JDBC --- Java Database Connectivity"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">数据库JDBC --- Java Database Connectivity</span>
+        </a>
+      
+    
+  </div>
+
+        
+      </div>
+    </div>
+  
+        
+      </div>
+    </div>
+  
+    
+    
+    
+    <div class="category row nomargin-x">
+      <a class="category-item collapsed
+          list-group-item category-item-action col-10 col-md-11 col-xm-11" title="C#"
+        id="heading-d7efa19fbe7d3972fd5adb6024223d74" role="tab" data-toggle="collapse" href="#collapse-d7efa19fbe7d3972fd5adb6024223d74"
+        aria-expanded="false"
+      >
+        C#
+        <span class="list-group-count"></span>
+        <i class="iconfont icon-arrowright"></i>
+      </a>
+      
+        <a href="/categories/C/" class="category-count col-2 col-md-1 col-xm-1">
+          <i class="iconfont icon-articles"></i>
+          <span>18</span>
+        </a>
+      
+      <div class="category-collapse collapse " id="collapse-d7efa19fbe7d3972fd5adb6024223d74"
+           role="tabpanel" aria-labelledby="heading-d7efa19fbe7d3972fd5adb6024223d74">
+        
+        
+          
+          
+  <div class="category-post-list">
+    
+    
+  </div>
+
+          
+  
+    
+    
+    
+    <div class="category-sub row nomargin-x">
+      <a class="category-subitem collapsed
+          list-group-item category-item-action col-10 col-md-11 col-xm-11" title="C# --- 日常case记录"
+        id="heading-4876ab163ee4ae59c1d5642d198abb67" role="tab" data-toggle="collapse" href="#collapse-4876ab163ee4ae59c1d5642d198abb67"
+        aria-expanded="false"
+      >
+        C# --- 日常case记录
+        <span class="list-group-count"></span>
+        <i class="iconfont icon-arrowright"></i>
+      </a>
+      
+        <a href="/categories/C/C-%E6%97%A5%E5%B8%B8case%E8%AE%B0%E5%BD%95/" class="category-count col-2 col-md-1 col-xm-1">
+          <i class="iconfont icon-articles"></i>
+          <span>9</span>
+        </a>
+      
+      <div class="category-collapse collapse " id="collapse-4876ab163ee4ae59c1d5642d198abb67"
+           role="tabpanel" aria-labelledby="heading-4876ab163ee4ae59c1d5642d198abb67">
+        
+        
+          
+  <div class="category-post-list">
+    
+    
+      
+      
+        <a href="/2024/04/27/%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%20---%20E2E%20Test%20System/" title="系统设计 --- E2E Test System"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">系统设计 --- E2E Test System</span>
+        </a>
+      
+    
+      
+      
+        <a href="/2024/04/27/%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%20--%20%E5%A6%82%E4%BD%95%E7%AE%A1%E7%90%86%E9%85%8D%E7%BD%AE%E4%BF%A1%E6%81%AF/" title="系统设计 -- 如何管理配置信息"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">系统设计 -- 如何管理配置信息</span>
+        </a>
+      
+    
+      
+      
+        <a href="/2024/04/27/%E5%AF%B9%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E5%B9%B6%E5%8F%91%E6%93%8D%E4%BD%9C%E5%AF%BC%E8%87%B4%E6%95%B0%E6%8D%AE%E9%87%8D%E5%A4%8D%E6%8F%92%E5%85%A5/" title="对数据库的并发操作导致数据重复插入"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">对数据库的并发操作导致数据重复插入</span>
+        </a>
+      
+    
+      
+      
+        <a href="/2024/04/27/C#%20---%20%E4%BD%BF%E7%94%A8%E4%BF%A1%E5%8F%B7%E9%87%8F%E6%8E%A7%E5%88%B6%E6%9F%A5%E8%AF%A2%E5%B9%B6%E5%8F%91%E6%95%B0%E9%87%8F/" title="C# --- 使用信号量控制查询并发数量"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">C# --- 使用信号量控制查询并发数量</span>
+        </a>
+      
+    
+      
+      
+        <a href="/2024/04/27/C#%20---%20%E4%BD%BF%E7%94%A8%20IValidatableObject%20+%20%5BRequired%5D%20%E6%8E%A5%E5%8F%A3%E8%BF%9B%E8%A1%8C%E6%95%B0%E6%8D%AE%E6%A0%A1%E9%AA%8C/" title="C# --- 使用 IValidatableObject + [Required] 接口进行数据校验"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">C# --- 使用 IValidatableObject + [Required] 接口进行数据校验</span>
+        </a>
+      
+    
+      
+      
+        <a href="/2024/04/27/C#%20---netcore%20MVC%E9%A1%B9%E7%9B%AE%E6%A1%86%E6%9E%B6%E7%BB%93%E6%9E%84%20with%20MongoDB/" title="C# ---netcore MVC项目框架结构 with MongoDB"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">C# ---netcore MVC项目框架结构 with MongoDB</span>
+        </a>
+      
+    
+      
+      
+        <a href="/2024/04/27/C#%20---%20MongoDB%E5%A6%82%E4%BD%95%E5%AE%89%E5%85%A8%E7%9A%84%E6%9B%BF%E6%8D%A2Collection/" title="C# --- MongoDB如何安全的替换Collection"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">C# --- MongoDB如何安全的替换Collection</span>
+        </a>
+      
+    
+      
+      
+        <a href="/2024/04/27/C#%20---%20Mongo%E6%95%B0%E6%8D%AE%E5%BA%93%E4%BA%8B%E5%8A%A1%E7%9A%84%E5%BA%94%E7%94%A8/" title="C# --- Mongo数据库事务的应用"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">C# --- Mongo数据库事务的应用</span>
+        </a>
+      
+    
+      
+      
+        <a href="/2024/04/26/C#%20---%20%E5%A6%82%E4%BD%95%E8%AF%BB%E5%8F%96%E8%BD%AC%E6%8D%A2Json%E6%96%87%E4%BB%B6/" title="C# --- 如何反序列化Json文件"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">C# --- 如何反序列化Json文件</span>
+        </a>
+      
+    
+  </div>
+
+        
+      </div>
+    </div>
+  
+    
+    
+    
+    <div class="category-sub row nomargin-x">
+      <a class="category-subitem collapsed
+          list-group-item category-item-action col-10 col-md-11 col-xm-11" title="C# --- 语法糖"
+        id="heading-feb7e3c781893f727353be8d17869c8d" role="tab" data-toggle="collapse" href="#collapse-feb7e3c781893f727353be8d17869c8d"
+        aria-expanded="false"
+      >
+        C# --- 语法糖
+        <span class="list-group-count"></span>
+        <i class="iconfont icon-arrowright"></i>
+      </a>
+      
+        <a href="/categories/C/C-%E8%AF%AD%E6%B3%95%E7%B3%96/" class="category-count col-2 col-md-1 col-xm-1">
+          <i class="iconfont icon-articles"></i>
+          <span>7</span>
+        </a>
+      
+      <div class="category-collapse collapse " id="collapse-feb7e3c781893f727353be8d17869c8d"
+           role="tabpanel" aria-labelledby="heading-feb7e3c781893f727353be8d17869c8d">
+        
+        
+          
+  <div class="category-post-list">
+    
+    
+      
+      
+        <a href="/2024/04/26/C#%20---Extension%20Method/" title="C# --- Extension Method"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">C# --- Extension Method</span>
+        </a>
+      
+    
+      
+      
+        <a href="/2024/04/26/C#%20---%20Struct%20and%20Record/" title="C# --- Struct and Record"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">C# --- Struct and Record</span>
+        </a>
+      
+    
+      
+      
+        <a href="/2024/04/26/C#%20---%20Null%20Operator/" title="C# --- Null Operator"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">C# --- Null Operator</span>
+        </a>
+      
+    
+      
+      
+        <a href="/2024/04/26/C#%20---Constructor,%20Object%20Initializer,%20Property,%20Constant,%20and%20readonly/" title="C# --- Constructor, Object Initializer, Property, Constant, and readonly"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">C# --- Constructor, Object Initializer, Property, Constant, and readonly</span>
+        </a>
+      
+    
+      
+      
+        <a href="/2024/04/26/C#%20---%20%E7%B1%BB%E5%9E%8B%E5%AE%89%E5%85%A8%20%E4%B8%8E%20var%E5%85%B3%E9%94%AE%E5%AD%97/" title="C# --- 类型安全 与 var关键字"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">C# --- 类型安全 与 var关键字</span>
+        </a>
+      
+    
+      
+      
+        <a href="/2024/04/26/C#%20---%20Lambda%20Expression/" title="C# --- Lambda Expression"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">C# --- Lambda Expression</span>
+        </a>
+      
+    
+      
+      
+        <a href="/2024/04/26/C#%20---%E5%A7%94%E6%89%98%E6%9C%BA%E5%88%B6%20delegate%20%E5%92%8C%20%E5%9B%9E%E8%B0%83%E6%96%B9%E6%B3%95%20callback/" title="C# --- 委托机制 delegate 和 回调 callback"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">C# --- 委托机制 delegate 和 回调 callback</span>
+        </a>
+      
+    
+  </div>
+
+        
+      </div>
+    </div>
+  
+    
+    
+    
+    <div class="category-sub row nomargin-x">
+      <a class="category-subitem collapsed
+          list-group-item category-item-action col-10 col-md-11 col-xm-11" title="C# --- 并发与异步机制"
+        id="heading-29f67d1c75bee7f315231fc63a9ec1af" role="tab" data-toggle="collapse" href="#collapse-29f67d1c75bee7f315231fc63a9ec1af"
+        aria-expanded="false"
+      >
+        C# --- 并发与异步机制
+        <span class="list-group-count"></span>
+        <i class="iconfont icon-arrowright"></i>
+      </a>
+      
+        <a href="/categories/C/C-%E5%B9%B6%E5%8F%91%E4%B8%8E%E5%BC%82%E6%AD%A5%E6%9C%BA%E5%88%B6/" class="category-count col-2 col-md-1 col-xm-1">
+          <i class="iconfont icon-articles"></i>
+          <span>2</span>
+        </a>
+      
+      <div class="category-collapse collapse " id="collapse-29f67d1c75bee7f315231fc63a9ec1af"
+           role="tabpanel" aria-labelledby="heading-29f67d1c75bee7f315231fc63a9ec1af">
+        
+        
+          
+  <div class="category-post-list">
+    
+    
+      
+      
+        <a href="/2024/04/26/C#%20---%20cancellation%20token/" title="C# --- cancellation token"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">C# --- cancellation token</span>
+        </a>
+      
+    
+      
+      
+        <a href="/2024/04/26/C#%20--%20%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B%20asyncawaitTask/" title="C# -- 异步编程 async/await/Task/Wait"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">C# -- 异步编程 async/await/Task/Wait</span>
+        </a>
+      
+    
+  </div>
+
+        
+      </div>
+    </div>
+  
+        
+      </div>
+    </div>
+  
+    
+    
+    
+    <div class="category row nomargin-x">
+      <a class="category-item collapsed
+          list-group-item category-item-action col-10 col-md-11 col-xm-11" title="数据结构与算法"
+        id="heading-14db252ece86404e75baf01f51842022" role="tab" data-toggle="collapse" href="#collapse-14db252ece86404e75baf01f51842022"
+        aria-expanded="false"
+      >
+        数据结构与算法
+        <span class="list-group-count"></span>
+        <i class="iconfont icon-arrowright"></i>
+      </a>
+      
+        <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" class="category-count col-2 col-md-1 col-xm-1">
+          <i class="iconfont icon-articles"></i>
+          <span>5</span>
+        </a>
+      
+      <div class="category-collapse collapse " id="collapse-14db252ece86404e75baf01f51842022"
+           role="tabpanel" aria-labelledby="heading-14db252ece86404e75baf01f51842022">
+        
+        
+          
+          
+  <div class="category-post-list">
+    
+    
+  </div>
+
+          
+  
+    
+    
+    
+    <div class="category-sub row nomargin-x">
+      <a class="category-subitem collapsed
+          list-group-item category-item-action col-10 col-md-11 col-xm-11" title="算法"
+        id="heading-046a899ee7a6ec88d370211a518c9e80" role="tab" data-toggle="collapse" href="#collapse-046a899ee7a6ec88d370211a518c9e80"
+        aria-expanded="false"
+      >
+        算法
+        <span class="list-group-count"></span>
+        <i class="iconfont icon-arrowright"></i>
+      </a>
+      
+        <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E7%AE%97%E6%B3%95/" class="category-count col-2 col-md-1 col-xm-1">
+          <i class="iconfont icon-articles"></i>
+          <span>5</span>
+        </a>
+      
+      <div class="category-collapse collapse " id="collapse-046a899ee7a6ec88d370211a518c9e80"
+           role="tabpanel" aria-labelledby="heading-046a899ee7a6ec88d370211a518c9e80">
+        
+        
+          
+  <div class="category-post-list">
+    
+    
+      
+      
+        <a href="/2024/04/27/%E7%AE%97%E6%B3%95%20---%20%E6%8E%92%E5%88%97%E5%92%8C%E7%BB%84%E5%90%88%20Permutation%20and%20Combination/" title="算法 --- 排列和组合 Permutation and Combination"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">算法 --- 排列和组合 Permutation and Combination</span>
+        </a>
+      
+    
+      
+      
+        <a href="/2024/04/27/%E7%AE%97%E6%B3%95%20---%20%E9%AB%98%E6%95%88%E7%BB%B4%E6%8A%A4%E4%B8%80%E4%B8%AA%E6%9C%89%E5%BA%8F%E6%95%B0%E7%BB%84/" title="算法 --- 维护一个有序数组"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">算法 --- 维护一个有序数组</span>
+        </a>
+      
+    
+      
+      
+        <a href="/2024/04/27/%E7%AE%97%E6%B3%95%20---%20%E5%8F%8C%E6%8C%87%E9%92%88%20Two%20Pointers/" title="算法 --- 双指针 Two Pointers"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">算法 --- 双指针 Two Pointers</span>
+        </a>
+      
+    
+      
+      
+        <a href="/2024/04/27/%E7%AE%97%E6%B3%95%20---%20%E8%AE%B0%E5%BF%86%E5%8C%96%E6%90%9C%E7%B4%A2%20Memorization%20Search/" title="算法 --- 记忆化搜索 Memorization Search"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">算法 --- 记忆化搜索 Memorization Search</span>
+        </a>
+      
+    
+      
+      
+        <a href="/2024/04/27/%E7%AE%97%E6%B3%95%20---%20%E4%BA%8C%E5%88%86%E6%9F%A5%E6%89%BE%20binarySearch/" title="算法 --- 二分查找 binarySearch"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">算法 --- 二分查找 binarySearch</span>
+        </a>
+      
+    
+  </div>
+
+        
+      </div>
+    </div>
+  
+        
+      </div>
+    </div>
+  
+</div>
+
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

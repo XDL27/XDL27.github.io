@@ -1,0 +1,844 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="XL">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Collection Interface  the Java collection library separates interfaces and implementations   Concrete Implementations LinkedListAddGet and Set Offer, Peek, PollPop, PushRemoveUtilities 1void clear():">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java 集合 --- Collection 框架">
+<meta property="og:url" content="http://example.com/2024/04/26/Java%20%E9%9B%86%E5%90%88%20---%20Collection%20%E6%A1%86%E6%9E%B6/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="Collection Interface  the Java collection library separates interfaces and implementations   Concrete Implementations LinkedListAddGet and Set Offer, Peek, PollPop, PushRemoveUtilities 1void clear():">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/2024/04/26/Java%20%E9%9B%86%E5%90%88%20---%20Collection%20%E6%A1%86%E6%9E%B6/1.png">
+<meta property="og:image" content="http://example.com/2024/04/26/Java%20%E9%9B%86%E5%90%88%20---%20Collection%20%E6%A1%86%E6%9E%B6/2.png">
+<meta property="og:image" content="http://example.com/2024/04/26/Java%20%E9%9B%86%E5%90%88%20---%20Collection%20%E6%A1%86%E6%9E%B6/3.png">
+<meta property="og:image" content="http://example.com/2024/04/26/Java%20%E9%9B%86%E5%90%88%20---%20Collection%20%E6%A1%86%E6%9E%B6/4.png">
+<meta property="og:image" content="http://example.com/2024/04/26/Java%20%E9%9B%86%E5%90%88%20---%20Collection%20%E6%A1%86%E6%9E%B6/5.png">
+<meta property="og:image" content="http://example.com/2024/04/26/Java%20%E9%9B%86%E5%90%88%20---%20Collection%20%E6%A1%86%E6%9E%B6/6.png">
+<meta property="og:image" content="http://example.com/2024/04/26/Java%20%E9%9B%86%E5%90%88%20---%20Collection%20%E6%A1%86%E6%9E%B6/7.png">
+<meta property="og:image" content="http://example.com/2024/04/26/Java%20%E9%9B%86%E5%90%88%20---%20Collection%20%E6%A1%86%E6%9E%B6/8.png">
+<meta property="og:image" content="http://example.com/2024/04/26/Java%20%E9%9B%86%E5%90%88%20---%20Collection%20%E6%A1%86%E6%9E%B6/9.png">
+<meta property="og:image" content="http://example.com/2024/04/26/Java%20%E9%9B%86%E5%90%88%20---%20Collection%20%E6%A1%86%E6%9E%B6/10.png">
+<meta property="og:image" content="http://example.com/2024/04/26/Java%20%E9%9B%86%E5%90%88%20---%20Collection%20%E6%A1%86%E6%9E%B6/11.png">
+<meta property="og:image" content="http://example.com/2024/04/26/Java%20%E9%9B%86%E5%90%88%20---%20Collection%20%E6%A1%86%E6%9E%B6/12.png">
+<meta property="og:image" content="http://example.com/2024/04/26/Java%20%E9%9B%86%E5%90%88%20---%20Collection%20%E6%A1%86%E6%9E%B6/13.png">
+<meta property="og:image" content="http://example.com/2024/04/26/Java%20%E9%9B%86%E5%90%88%20---%20Collection%20%E6%A1%86%E6%9E%B6/14.png">
+<meta property="og:image" content="http://example.com/2024/04/26/Java%20%E9%9B%86%E5%90%88%20---%20Collection%20%E6%A1%86%E6%9E%B6/15.png">
+<meta property="og:image" content="http://example.com/2024/04/26/Java%20%E9%9B%86%E5%90%88%20---%20Collection%20%E6%A1%86%E6%9E%B6/16.png">
+<meta property="og:image" content="http://example.com/2024/04/26/Java%20%E9%9B%86%E5%90%88%20---%20Collection%20%E6%A1%86%E6%9E%B6/17.png">
+<meta property="og:image" content="http://example.com/2024/04/26/Java%20%E9%9B%86%E5%90%88%20---%20Collection%20%E6%A1%86%E6%9E%B6/18.png">
+<meta property="article:published_time" content="2024-04-26T15:19:19.000Z">
+<meta property="article:modified_time" content="2024-04-26T15:36:55.155Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/2024/04/26/Java%20%E9%9B%86%E5%90%88%20---%20Collection%20%E6%A1%86%E6%9E%B6/1.png">
+  
+  
+  
+  <title>Java 集合 --- Collection 框架 - Hexo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.7","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.2.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>XL</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Java 集合 --- Collection 框架"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-04-26 23:19" pubdate>
+          2024年4月26日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          1k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          9 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Java 集合 --- Collection 框架</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="Collection-Interface"><a href="#Collection-Interface" class="headerlink" title="Collection Interface"></a>Collection Interface</h1><blockquote>
+<ul>
+<li>the Java collection library separates interfaces and implementations<br><img src="/2024/04/26/Java%20%E9%9B%86%E5%90%88%20---%20Collection%20%E6%A1%86%E6%9E%B6/1.png" srcset="/img/loading.gif" lazyload></li>
+</ul>
+</blockquote>
+<h1 id="Concrete-Implementations"><a href="#Concrete-Implementations" class="headerlink" title="Concrete Implementations"></a>Concrete Implementations</h1><p><img src="/2024/04/26/Java%20%E9%9B%86%E5%90%88%20---%20Collection%20%E6%A1%86%E6%9E%B6/2.png" srcset="/img/loading.gif" lazyload></p>
+<h2 id="LinkedList"><a href="#LinkedList" class="headerlink" title="LinkedList"></a>LinkedList</h2><p><strong>Add</strong><br><img src="/2024/04/26/Java%20%E9%9B%86%E5%90%88%20---%20Collection%20%E6%A1%86%E6%9E%B6/3.png" srcset="/img/loading.gif" lazyload><br><strong>Get and Set</strong><br><img src="/2024/04/26/Java%20%E9%9B%86%E5%90%88%20---%20Collection%20%E6%A1%86%E6%9E%B6/4.png" srcset="/img/loading.gif" lazyload><br><img src="/2024/04/26/Java%20%E9%9B%86%E5%90%88%20---%20Collection%20%E6%A1%86%E6%9E%B6/5.png" srcset="/img/loading.gif" lazyload></p>
+<p><strong>Offer, Peek, Poll</strong><br><img src="/2024/04/26/Java%20%E9%9B%86%E5%90%88%20---%20Collection%20%E6%A1%86%E6%9E%B6/6.png" srcset="/img/loading.gif" lazyload><br><strong>Pop, Push</strong><br><img src="/2024/04/26/Java%20%E9%9B%86%E5%90%88%20---%20Collection%20%E6%A1%86%E6%9E%B6/7.png" srcset="/img/loading.gif" lazyload><br><strong>Remove</strong><br><img src="/2024/04/26/Java%20%E9%9B%86%E5%90%88%20---%20Collection%20%E6%A1%86%E6%9E%B6/8.png" srcset="/img/loading.gif" lazyload><br><strong>Utilities</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">void</span> <span class="hljs-title function_">clear</span><span class="hljs-params">()</span>: Removes all of the elements from <span class="hljs-built_in">this</span> list.<br></code></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java">Object <span class="hljs-title function_">clone</span><span class="hljs-params">()</span>: Returns a shallow copy of <span class="hljs-built_in">this</span> LinkedList.<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">boolean</span>	<span class="hljs-title function_">contains</span><span class="hljs-params">(Object o)</span>: Returns <span class="hljs-literal">true</span> <span class="hljs-keyword">if</span> <span class="hljs-built_in">this</span> list contains the specified element.<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">int</span> <span class="hljs-title function_">indexOf</span><span class="hljs-params">(Object o)</span>: Returns the index of the first occurrence of the specified element in <span class="hljs-built_in">this</span> list, or -<span class="hljs-number">1</span> <span class="hljs-keyword">if</span> <span class="hljs-built_in">this</span> list does not contain the element.<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">int</span>	<span class="hljs-title function_">size</span><span class="hljs-params">()</span>: Returns the number of elements in <span class="hljs-built_in">this</span> list.<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java">Object[]	toArray(): Returns an array containing all of the elements in <span class="hljs-built_in">this</span> list in proper <span class="hljs-title function_">sequence</span> <span class="hljs-params">(from first to last element)</span>.<br></code></pre></td></tr></table></figure>
+
+<h2 id="ArrayList"><a href="#ArrayList" class="headerlink" title="ArrayList"></a>ArrayList</h2><p><strong>Add</strong><br><img src="/2024/04/26/Java%20%E9%9B%86%E5%90%88%20---%20Collection%20%E6%A1%86%E6%9E%B6/9.png" srcset="/img/loading.gif" lazyload><br><strong>delete</strong><br><img src="/2024/04/26/Java%20%E9%9B%86%E5%90%88%20---%20Collection%20%E6%A1%86%E6%9E%B6/10.png" srcset="/img/loading.gif" lazyload><br><strong>set, get, replace</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java">E <span class="hljs-title function_">get</span><span class="hljs-params">(<span class="hljs-type">int</span> index)</span>: Returns the element at the specified position in <span class="hljs-built_in">this</span> list.<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java">E <span class="hljs-title function_">set</span><span class="hljs-params">(<span class="hljs-type">int</span> index, E element)</span>: Replaces the element at the specified position in <span class="hljs-built_in">this</span> list with the specified element.<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">void</span> <span class="hljs-title function_">replaceAll</span><span class="hljs-params">(UnaryOperator&lt;E&gt; operator)</span>: Replaces each element of <span class="hljs-built_in">this</span> list with the result of applying the operator to that element.##  Sets<br></code></pre></td></tr></table></figure>
+<p><strong>Utilities</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">void</span> <span class="hljs-title function_">clear</span><span class="hljs-params">()</span>: Removes all of the elements from <span class="hljs-built_in">this</span> list.<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java">Object <span class="hljs-title function_">clone</span><span class="hljs-params">()</span>: Returns a shallow copy of <span class="hljs-built_in">this</span> ArrayList instance.<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">boolean</span>	<span class="hljs-title function_">contains</span><span class="hljs-params">(Object o)</span>: Returns <span class="hljs-literal">true</span> <span class="hljs-keyword">if</span> <span class="hljs-built_in">this</span> list contains the specified element.<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">void</span> <span class="hljs-title function_">forEach</span><span class="hljs-params">(Consumer&lt;? <span class="hljs-built_in">super</span> E&gt; action)</span>: Performs the given action <span class="hljs-keyword">for</span> each element of the Iterable until all elements have been processed or the action <span class="hljs-keyword">throws</span> an exception.<br></code></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">int</span>	<span class="hljs-title function_">indexOf</span><span class="hljs-params">(Object o)</span>: Returns the index of the first occurrence of the specified element in <span class="hljs-built_in">this</span> list, or -<span class="hljs-number">1</span> <span class="hljs-keyword">if</span> <span class="hljs-built_in">this</span> list does not contain the element.<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java">Object[] toArray(): Returns an array containing all of the elements in <span class="hljs-built_in">this</span> list in proper <span class="hljs-title function_">sequence</span> <span class="hljs-params">(from first to last element)</span>.<br></code></pre></td></tr></table></figure>
+
+<p><strong>“only arrayList”</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">boolean</span>	<span class="hljs-title function_">isEmpty</span><span class="hljs-params">()</span>: Returns <span class="hljs-literal">true</span> <span class="hljs-keyword">if</span> <span class="hljs-built_in">this</span> list contains no elements.<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">int</span>	<span class="hljs-title function_">size</span><span class="hljs-params">()</span>: Returns the number of elements in <span class="hljs-built_in">this</span> list.<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">void</span> <span class="hljs-title function_">sort</span><span class="hljs-params">(Comparator&lt;? <span class="hljs-built_in">super</span> E&gt; c)</span>: Sorts <span class="hljs-built_in">this</span> list according to the order induced by the specified Comparator.<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">void</span> <span class="hljs-title function_">trimToSize</span><span class="hljs-params">()</span>: Trims the capacity of <span class="hljs-built_in">this</span> ArrayList instance to be the list<span class="hljs-string">&#x27;s current size.</span><br></code></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">void</span> <span class="hljs-title function_">ensureCapacity</span><span class="hljs-params">(<span class="hljs-type">int</span> minCapacity)</span>: Increases the capacity of <span class="hljs-built_in">this</span> ArrayList instance, <span class="hljs-keyword">if</span> necessary, to ensure that it can hold at least the number of elements specified by the minimum capacity argument.<br></code></pre></td></tr></table></figure>
+<h2 id="ArrayList-和-LinkedList的区别"><a href="#ArrayList-和-LinkedList的区别" class="headerlink" title="ArrayList 和 LinkedList的区别"></a>ArrayList 和 LinkedList的区别</h2><p><strong>insert and delete</strong></p>
+<blockquote>
+<ul>
+<li>ArrayList: O(n), 因为要将目标位置之后的元素向前移位(delete)或者向后移位(insert),<br>如果超出capacity则需要扩容会增加时间复杂度</li>
+<li>LinkedList: O(n), 需要遍历linkedlist找到node, 然后进行操作: O(1)</li>
+</ul>
+</blockquote>
+<p><strong>set and get</strong> </p>
+<blockquote>
+<ul>
+<li>ArrayList: O(1), 通过下标直接操作</li>
+<li>LinkedList: O(n) 需要遍历linkedlist找到node, 然后进行操作</li>
+</ul>
+</blockquote>
+<p><strong>“space”</strong></p>
+<blockquote>
+<ul>
+<li>ArrayList: 只需数组的空间</li>
+<li>LinkedList: 有overhead, 比如next,pre指针</li>
+</ul>
+</blockquote>
+<p><strong>Summary</strong> </p>
+<blockquote>
+<ul>
+<li>很多场景下ArrayList更受欢迎</li>
+</ul>
+</blockquote>
+<h2 id="Queues-and-Deques"><a href="#Queues-and-Deques" class="headerlink" title="Queues and Deques"></a>Queues and Deques</h2><blockquote>
+<ul>
+<li>Queue:  在尾部加入元素, 从头部删除元素</li>
+<li>Deque (double-ended queue): 可以从头部或者尾部加入删除元素</li>
+<li>可以用LinkedList替代(LinkedList提供了Queue和Deque功能)<br><img src="/2024/04/26/Java%20%E9%9B%86%E5%90%88%20---%20Collection%20%E6%A1%86%E6%9E%B6/11.png" srcset="/img/loading.gif" lazyload><br><img src="/2024/04/26/Java%20%E9%9B%86%E5%90%88%20---%20Collection%20%E6%A1%86%E6%9E%B6/12.png" srcset="/img/loading.gif" lazyload><br><img src="/2024/04/26/Java%20%E9%9B%86%E5%90%88%20---%20Collection%20%E6%A1%86%E6%9E%B6/13.png" srcset="/img/loading.gif" lazyload></li>
+</ul>
+</blockquote>
+<h2 id="Priority-Queues"><a href="#Priority-Queues" class="headerlink" title="Priority Queues"></a>Priority Queues</h2><p><img src="/2024/04/26/Java%20%E9%9B%86%E5%90%88%20---%20Collection%20%E6%A1%86%E6%9E%B6/14.png" srcset="/img/loading.gif" lazyload></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">package</span> priorityQueue;<br><span class="hljs-keyword">import</span> java.util.*;<br><span class="hljs-keyword">import</span> java.time.*;<br><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * This program demonstrates the use of a priority queue.</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@version</span> 1.02 2015-06-20</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@author</span> Cay Horstmann</span><br><span class="hljs-comment"> */</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">PriorityQueueTest</span><br>&#123;<br>	<span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String[] args)</span> &#123;<br>		PriorityQueue&lt;LocalDate&gt; pq = <span class="hljs-keyword">new</span> <span class="hljs-title class_">PriorityQueue</span>&lt;&gt;();<br>		pq.add(LocalDate.of(<span class="hljs-number">1906</span>, <span class="hljs-number">12</span>, <span class="hljs-number">9</span>)); <span class="hljs-comment">// G. Hopper</span><br>		pq.add(LocalDate.of(<span class="hljs-number">1815</span>, <span class="hljs-number">12</span>, <span class="hljs-number">10</span>)); <span class="hljs-comment">// A. Lovelace</span><br>		pq.add(LocalDate.of(<span class="hljs-number">1903</span>, <span class="hljs-number">12</span>, <span class="hljs-number">3</span>)); <span class="hljs-comment">// J. von Neumann</span><br>		pq.add(LocalDate.of(<span class="hljs-number">1910</span>, <span class="hljs-number">6</span>, <span class="hljs-number">22</span>)); <span class="hljs-comment">// K. Zuse</span><br>		System.out.println(<span class="hljs-string">&quot;Iterating over elements...&quot;</span>);<br>		<span class="hljs-keyword">for</span> (LocalDate date : pq)<br>   			System.out.println(date);<br>   		System.out.println(<span class="hljs-string">&quot;Removing elements...&quot;</span>);<br>   		<span class="hljs-keyword">while</span> (!pq.isEmpty())<br>    		System.out.println(pq.remove());<br>   &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h2 id="HashSets"><a href="#HashSets" class="headerlink" title="HashSets"></a>HashSets</h2><blockquote>
+<ul>
+<li>无序的set</li>
+<li>使用HashTable实现 bucket hashing (Array + LinkedList)</li>
+<li>默认bucket大小是 2^16, load factor是0.75</li>
+</ul>
+</blockquote>
+<p><img src="/2024/04/26/Java%20%E9%9B%86%E5%90%88%20---%20Collection%20%E6%A1%86%E6%9E%B6/15.png" srcset="/img/loading.gif" lazyload></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">SetTest</span><br>&#123;<br>	<span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String[] args)</span> &#123;<br>		Set&lt;String&gt; words = <span class="hljs-keyword">new</span> <span class="hljs-title class_">HashSet</span>&lt;&gt;(); <span class="hljs-comment">// HashSet implements Set</span><br>		<span class="hljs-type">long</span> <span class="hljs-variable">totalTime</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>;<br><br>		<span class="hljs-keyword">try</span> (<span class="hljs-type">Scanner</span> <span class="hljs-variable">in</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Scanner</span>(System.in)) &#123;<br>			<span class="hljs-keyword">while</span> (in.hasNext()) &#123;<br> 				<span class="hljs-type">String</span> <span class="hljs-variable">word</span> <span class="hljs-operator">=</span> in.next();<br> 				<span class="hljs-type">long</span> <span class="hljs-variable">callTime</span> <span class="hljs-operator">=</span> System.currentTimeMillis();<br> 				words.add(word);<br> 				callTime = System.currentTimeMillis() - callTime;<br> 				totalTime += callTime;<br> 			&#125;<br> 		&#125;<br> <br> 		Iterator&lt;String&gt; iter = words.iterator();<br> 		<span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> <span class="hljs-variable">i</span> <span class="hljs-operator">=</span> <span class="hljs-number">1</span>; i &lt;= <span class="hljs-number">20</span> &amp;&amp; iter.hasNext(); i++)<br> 			System.out.println(iter.next());<br> 			System.out.println(<span class="hljs-string">&quot;. . .&quot;</span>);<br> 			System.out.println(words.size() + <span class="hljs-string">&quot; distinct words. &quot;</span> + totalTime + <span class="hljs-string">&quot; milliseconds.&quot;</span>);<br> 		&#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p><strong>LinkedHashSet</strong></p>
+<blockquote>
+<p>是HashSet的一个子类, 元素按照加入顺序排序</p>
+</blockquote>
+<h2 id="TreeSets"><a href="#TreeSets" class="headerlink" title="TreeSets"></a>TreeSets</h2><blockquote>
+<ul>
+<li>有序的Set</li>
+<li>使用红黑树实现</li>
+<li>TreeSet的插入复杂度要比HashSet快, 但是检查重复要比HashSet快(LogN)</li>
+<li>因为是有序的所以必须重新<code>compareTo</code> 否则会报错, String等非自定义类型已经重写了compareTo方法</li>
+<li>如果数据不要求排序最好使用HashSet</li>
+</ul>
+</blockquote>
+<p><img src="/2024/04/26/Java%20%E9%9B%86%E5%90%88%20---%20Collection%20%E6%A1%86%E6%9E%B6/16.png" srcset="/img/loading.gif" lazyload><br><img src="/2024/04/26/Java%20%E9%9B%86%E5%90%88%20---%20Collection%20%E6%A1%86%E6%9E%B6/17.png" srcset="/img/loading.gif" lazyload></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">TreeSetTest</span> &#123;<br>	<span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String[] args)</span> &#123;<br>		SortedSet&lt;Item&gt; parts = <span class="hljs-keyword">new</span> <span class="hljs-title class_">TreeSet</span>&lt;&gt;();<br>		parts.add(<span class="hljs-keyword">new</span> <span class="hljs-title class_">Item</span>(<span class="hljs-string">&quot;Toaster&quot;</span>, <span class="hljs-number">1234</span>));<br>		parts.add(<span class="hljs-keyword">new</span> <span class="hljs-title class_">Item</span>(<span class="hljs-string">&quot;Widget&quot;</span>, <span class="hljs-number">4562</span>));<br>		parts.add(<span class="hljs-keyword">new</span> <span class="hljs-title class_">Item</span>(<span class="hljs-string">&quot;Modem&quot;</span>, <span class="hljs-number">9912</span>));<br>		System.out.println(parts);<br>		NavigableSet&lt;Item&gt; sortByDescription = <span class="hljs-keyword">new</span> <span class="hljs-title class_">TreeSet</span>&lt;&gt;(<br>		Comparator.comparing(Item::getDescription)); <br>		sortByDescription.addAll(parts);<br>		System.out.println(sortByDescription);<br>	&#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h2 id="EnumSet"><a href="#EnumSet" class="headerlink" title="EnumSet"></a>EnumSet</h2><blockquote>
+<ul>
+<li>element是enum类型</li>
+<li>Since an enumerated type has a finite number of instances, the EnumSet is internally implemented simply as a sequence of bits. </li>
+<li>A bit is turned on if the corresponding value is present in the set.</li>
+</ul>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">enum</span> <span class="hljs-title class_">Weekday</span> &#123; MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY &#125;;<br>EnumSet&lt;Weekday&gt; always = EnumSet.allOf(Weekday.class);<br>EnumSet&lt;Weekday&gt; never = EnumSet.noneOf(Weekday.class);<br>EnumSet&lt;Weekday&gt; workday = EnumSet.range(Weekday.MONDAY, Weekday.FRIDAY);<br>EnumSet&lt;Weekday&gt; mwf = EnumSet.of(Weekday.MONDAY, Weekday.WEDNESDAY, Weekday.FRIDAY);<br></code></pre></td></tr></table></figure>
+<h1 id="Map"><a href="#Map" class="headerlink" title="Map"></a>Map</h1><blockquote>
+<ul>
+<li>Map没有继承Collection接口</li>
+<li>AbstractMap和AbstractCollection是平级关系<br><img src="/2024/04/26/Java%20%E9%9B%86%E5%90%88%20---%20Collection%20%E6%A1%86%E6%9E%B6/18.png" srcset="/img/loading.gif" lazyload></li>
+</ul>
+</blockquote>
+<h2 id="Map的基本操作"><a href="#Map的基本操作" class="headerlink" title="Map的基本操作"></a>Map的基本操作</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">package</span> map;<br><span class="hljs-keyword">import</span> java.util.*;<br><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * This program demonstrates the use of a map with key type String and value type Employee.</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@version</span> 1.12 2015-06-21</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@author</span> Cay Horstmann</span><br><span class="hljs-comment"> */</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">MapTest</span> &#123;<br>	<span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String[] args)</span> &#123;<br>		Map&lt;String, Employee&gt; staff = <span class="hljs-keyword">new</span> <span class="hljs-title class_">HashMap</span>&lt;&gt;();<br>		staff.put(<span class="hljs-string">&quot;144-25-5464&quot;</span>, <span class="hljs-keyword">new</span> <span class="hljs-title class_">Employee</span>(<span class="hljs-string">&quot;Amy Lee&quot;</span>));<br>		staff.put(<span class="hljs-string">&quot;567-24-2546&quot;</span>, <span class="hljs-keyword">new</span> <span class="hljs-title class_">Employee</span>(<span class="hljs-string">&quot;Harry Hacker&quot;</span>));<br>		staff.put(<span class="hljs-string">&quot;157-62-7935&quot;</span>, <span class="hljs-keyword">new</span> <span class="hljs-title class_">Employee</span>(<span class="hljs-string">&quot;Gary Cooper&quot;</span>));<br>		staff.put(<span class="hljs-string">&quot;456-62-5527&quot;</span>, <span class="hljs-keyword">new</span> <span class="hljs-title class_">Employee</span>(<span class="hljs-string">&quot;Francesca Cruz&quot;</span>));<br>		<span class="hljs-comment">// print all entries</span><br>		System.out.println(staff);<br>		<span class="hljs-comment">// remove an entry</span><br>		staff.remove(<span class="hljs-string">&quot;567-24-2546&quot;</span>);<br>		<span class="hljs-comment">// replace an entry</span><br>		staff.put(<span class="hljs-string">&quot;456-62-5527&quot;</span>, <span class="hljs-keyword">new</span> <span class="hljs-title class_">Employee</span>(<span class="hljs-string">&quot;Francesca Miller&quot;</span>));<br>		<span class="hljs-comment">// look up a value</span><br>		System.out.println(staff.get(<span class="hljs-string">&quot;157-62-7935&quot;</span>));<br>		<span class="hljs-comment">// iterate through all entries</span><br>		staff.forEach((k, v) -&gt; <br>		System.out.println(<span class="hljs-string">&quot;key=&quot;</span> + k + <span class="hljs-string">&quot;, value=&quot;</span> + v));<br>	&#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h2 id="如何查看Map"><a href="#如何查看Map" class="headerlink" title="如何查看Map"></a>如何查看Map</h2><p><strong>the set of keys</strong>: 将所有的key作为一个set返回</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java">Set&lt;K&gt; <span class="hljs-title function_">keySet</span><span class="hljs-params">()</span><br></code></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs java">Set&lt;String&gt; keys = map.keySet();<br><span class="hljs-keyword">for</span> (String key : keys) &#123;<br>	<span class="hljs-keyword">do</span> something with key<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p><strong>the collection of values (which is not a set)</strong>: 将所有的value作为一个collection返回</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java">Collection&lt;V&gt; <span class="hljs-title function_">values</span><span class="hljs-params">()</span><br></code></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs java">Map&lt;String,String&gt; map=<span class="hljs-keyword">new</span> <span class="hljs-title class_">HashMap</span>&lt;&gt;();<br>       map.put(<span class="hljs-string">&quot;abc&quot;</span>,<span class="hljs-string">&quot;123&quot;</span>);<br>       map.put(<span class="hljs-string">&quot;efg&quot;</span>,<span class="hljs-string">&quot;456&quot;</span>);<br>       <span class="hljs-comment">// 使用增强型for遍历循环Map集合</span><br>       Collection&lt;String&gt; values = map.values();<br>       <span class="hljs-keyword">for</span> (String value : values) &#123;<br>           System.out.println(value);<br>       &#125;<br></code></pre></td></tr></table></figure>
+
+<p><strong>the set of key&#x2F;value pairs</strong>: 得到每一对key value pair</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java">Set&lt;Map.Entry&lt;K, V&gt;&gt; entrySet()<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">for</span> (Map.Entry&lt;String, Employee&gt; entry : staff.entrySet()) &#123;<br>	<span class="hljs-type">String</span> <span class="hljs-variable">k</span> <span class="hljs-operator">=</span> entry.getKey();<br>	<span class="hljs-type">Employee</span> <span class="hljs-variable">v</span> <span class="hljs-operator">=</span> entry.getValue();<br>	<span class="hljs-keyword">do</span> something with k, v<br>&#125;<br></code></pre></td></tr></table></figure>
+<h2 id="Type-of-HashMap"><a href="#Type-of-HashMap" class="headerlink" title="Type of HashMap"></a>Type of HashMap</h2><p><strong>HashMap</strong></p>
+<blockquote>
+<ul>
+<li>Hash table based implementation of the Map interface</li>
+<li>the default load factor (.75)</li>
+<li>有一个子类为LinkedHashMap, 元素按照加入顺序排序</li>
+</ul>
+</blockquote>
+<p><strong>TreeMap</strong></p>
+<blockquote>
+<ul>
+<li>A Red-Black tree based NavigableMap implementation.</li>
+<li>需要根据compareTo排序</li>
+</ul>
+</blockquote>
+<p><strong>EumerateHashMap</strong></p>
+<blockquote>
+<ul>
+<li>A specialized Map implementation for use with enum type keys. </li>
+<li>All of the keys in an enum map must come from a single enum type that is specified</li>
+</ul>
+</blockquote>
+<p><strong>WeakHashMap</strong></p>
+<blockquote>
+<ul>
+<li>Hash table based implementation of the Map interface, with weak keys.</li>
+<li>An entry in a WeakHashMap will automatically be removed when its key is no longer in ordinary use</li>
+</ul>
+</blockquote>
+<h2 id="Collection和Array互相转换"><a href="#Collection和Array互相转换" class="headerlink" title="Collection和Array互相转换"></a>Collection和Array互相转换</h2><p><strong>Collection To Array</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java">Object[] values = staff.toArray();<br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<ul>
+<li>但是values的类型是Object并且不能转换类型  <code>String[] values = (String[]) staff.toArray(); // Error!</code></li>
+<li>可以用如下写法: <code>String[] values = staff.toArray(new String[staff.size()]);</code></li>
+</ul>
+</blockquote>
+<p><strong>Array To Collection</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java">Arrays.asList()<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs java">String[] values = . . .;<br>HashSet&lt;String&gt; staff = <span class="hljs-keyword">new</span> <span class="hljs-title class_">HashSet</span>&lt;&gt;(Arrays.asList(values)); <span class="hljs-comment">//所有的collection都可以通过另外一个collection初始化</span><br><br></code></pre></td></tr></table></figure>
+
+
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Java-SE/" class="category-chain-item">Java SE</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/Java-SE/Java-%E9%9B%86%E5%90%88Collection/" class="category-chain-item">Java --- 集合Collection</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Java 集合 --- Collection 框架</div>
+      <div>http://example.com/2024/04/26/Java 集合 --- Collection 框架/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>XL</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年4月26日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/04/26/%E6%95%B0%E6%8D%AE%E5%BA%93JDBC%20---%20Java%20Database%20Connectivity/" title="数据库JDBC --- Java Database Connectivity">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">数据库JDBC --- Java Database Connectivity</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/04/26/Java%20%E9%9B%86%E5%90%88%20---%20HashMap%E7%9A%84%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86/" title="Java 集合 --- HashMap的底层原理">
+                        <span class="hidden-mobile">Java 集合 --- HashMap的底层原理</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

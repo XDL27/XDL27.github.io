@@ -1,0 +1,768 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="XL">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="什么是反射  一般情况下使用new 关键字实例化一个类,创建初始化一个对象 也就是在写代码时我们就知道类的类别, 类的属性,   类的所有方法等   12Apple apple &#x3D; new Apple(); &#x2F;&#x2F;直接初始化apple.setPrice(4);   而反射则和正常情况相反, 在写代码时我们不知道类的类别, 类的属性, 类的方法等 这时候，我们使用 JDK 提供的反射 API 进行反射">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java基础 --- 反射机制 Reflection">
+<meta property="og:url" content="http://example.com/2024/04/26/Java%E5%9F%BA%E7%A1%80%20---%20%E5%8F%8D%E5%B0%84%E6%9C%BA%E5%88%B6%20Reflection/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="什么是反射  一般情况下使用new 关键字实例化一个类,创建初始化一个对象 也就是在写代码时我们就知道类的类别, 类的属性,   类的所有方法等   12Apple apple &#x3D; new Apple(); &#x2F;&#x2F;直接初始化apple.setPrice(4);   而反射则和正常情况相反, 在写代码时我们不知道类的类别, 类的属性, 类的方法等 这时候，我们使用 JDK 提供的反射 API 进行反射">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/2024/04/26/Java%E5%9F%BA%E7%A1%80%20---%20%E5%8F%8D%E5%B0%84%E6%9C%BA%E5%88%B6%20Reflection/1.png">
+<meta property="article:published_time" content="2024-04-26T15:19:26.000Z">
+<meta property="article:modified_time" content="2024-04-26T15:45:08.890Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/2024/04/26/Java%E5%9F%BA%E7%A1%80%20---%20%E5%8F%8D%E5%B0%84%E6%9C%BA%E5%88%B6%20Reflection/1.png">
+  
+  
+  
+  <title>Java基础 --- 反射机制 Reflection - Hexo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.7","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.2.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>XL</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Java基础 --- 反射机制 Reflection"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-04-26 23:19" pubdate>
+          2024年4月26日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          3.3k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          28 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Java基础 --- 反射机制 Reflection</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="什么是反射"><a href="#什么是反射" class="headerlink" title="什么是反射"></a>什么是反射</h1><blockquote>
+<ul>
+<li>一般情况下使用new 关键字实例化一个类,创建初始化一个对象</li>
+<li>也就是在写代码时我们就知道类的类别, 类的属性,   类的所有方法等</li>
+</ul>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">Apple</span> <span class="hljs-variable">apple</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Apple</span>(); <span class="hljs-comment">//直接初始化</span><br>apple.setPrice(<span class="hljs-number">4</span>);<br></code></pre></td></tr></table></figure>
+<blockquote>
+<ul>
+<li>而反射则和正常情况相反, 在写代码时我们不知道类的类别, 类的属性, 类的方法等</li>
+<li>这时候，我们使用 JDK 提供的反射 API 进行反射调用创建对象</li>
+</ul>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">Class</span> <span class="hljs-variable">clz</span> <span class="hljs-operator">=</span> Class.forName(<span class="hljs-string">&quot;com.chenshuyi.reflect.Apple&quot;</span>);<br><span class="hljs-type">Method</span> <span class="hljs-variable">method</span> <span class="hljs-operator">=</span> clz.getMethod(<span class="hljs-string">&quot;setPrice&quot;</span>, <span class="hljs-type">int</span>.class);<br><span class="hljs-type">Constructor</span> <span class="hljs-variable">constructor</span> <span class="hljs-operator">=</span> clz.getConstructor();<br><span class="hljs-type">Object</span> <span class="hljs-variable">object</span> <span class="hljs-operator">=</span> constructor.newInstance();<br>method.invoke(object, <span class="hljs-number">4</span>);<br></code></pre></td></tr></table></figure>
+<blockquote>
+<p><strong>JAVA反射机制是在运行状态中，对于任意一个类，都能够知道这个类的所有属性和方法；对于任意一个对象，都能够调用它的任意方法和属性；这种动态获取信息以及动态调用对象方法的功能称为java语言的反射机制. 这种动态获取信息以及动态调用对象方法的功能称为java语言的反射机制</strong></p>
+</blockquote>
+<h1 id="反射的实现原理"><a href="#反射的实现原理" class="headerlink" title="反射的实现原理"></a>反射的实现原理</h1><h2 id="Class-类"><a href="#Class-类" class="headerlink" title="Class 类"></a>Class 类</h2><blockquote>
+<p><img src="/2024/04/26/Java%E5%9F%BA%E7%A1%80%20---%20%E5%8F%8D%E5%B0%84%E6%9C%BA%E5%88%B6%20Reflection/1.png" srcset="/img/loading.gif" lazyload></p>
+</blockquote>
+<blockquote>
+<ul>
+<li>当我们写完一个Java项目之后，每个java文件都会被编译成一个 .class文件</li>
+<li>这些 .class文件在程序运行时会被ClassLoader加载到JVM中，当一个类被加载以后，JVM就会在内存中自动产生一个Class对象</li>
+<li>Class类是一个特殊的类, 包括了大量的方法可以获得一个类的详细信息, 下面是常用的方法</li>
+</ul>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs java">Class.forName();动态加载类。<br>newInstance() ：根据对象的class新建一个对象<br>getSuperclass() 获取继承的父类<br>getInterfaces() 获取继承的接口<br>getDeclaredFields() 获取所有属性名<br>getDeclaredMethods();获取当前类的所有方法。<br>getConstructors() ：获得所有的构造函数。<br>getModifiers() ： 反射中获得修饰符<br>getPackage() ：反射中获得<span class="hljs-keyword">package</span><br><span class="hljs-title function_">getField</span><span class="hljs-params">(String name)</span>：反射中获得属性成员。<br>getFields() :获得域数组成员。<br>isAnnotation() ：判断是否为注解类型。<br>isPrimitive() ：判断是否为基本类型。<br>isArray() ：判断是否为数组类型。<br>isEnum() ：判断是否为枚举类型。<br>getClassLoader() ：获得类的类加载器<br>getMethods() 获得公共的方法<br></code></pre></td></tr></table></figure>
+<p><strong>获取Class对象的三个方法</strong></p>
+<blockquote>
+<p>Class.forName(“全类名”)<br>注意是全类名,也就是类的完整路径</p>
+</blockquote>
+<blockquote>
+<p>类名.class<br>通过类名的class属性获取</p>
+</blockquote>
+<blockquote>
+<p>对象名.getClass()<br>getClass()方法定义于Object类中</p>
+</blockquote>
+<h1 id="使用-java-lang-reflect和Class类"><a href="#使用-java-lang-reflect和Class类" class="headerlink" title="使用 java.lang.reflect和Class类"></a>使用 java.lang.reflect和Class类</h1><blockquote>
+<p><strong>反射的本质其实就是用java.lang.reflect类库API操作Class对象的结果</strong></p>
+</blockquote>
+<blockquote>
+<ul>
+<li>java.lang.reflect中最主要的类: Field, Method, and Constructor , 分别描述一个类的成员属性, 所有方法以及构造函数</li>
+</ul>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">package</span> reflection; <br><span class="hljs-keyword">import</span> java.util.*;<br><span class="hljs-keyword">import</span> java.lang.reflect.*;<br><span class="hljs-comment">/**</span><br><span class="hljs-comment">  * This program uses reflection to print all features of a class.</span><br><span class="hljs-comment">  * <span class="hljs-doctag">@version</span> 1.1 2004-02-21</span><br><span class="hljs-comment">  * <span class="hljs-doctag">@author</span> Cay Horstmann</span><br><span class="hljs-comment"> */</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">ReflectionTest</span> &#123;<br>	<span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String[] args)</span> &#123;<br>		<span class="hljs-comment">// read class name from command line args or user input</span><br>		String name;<br>		<span class="hljs-keyword">if</span> (args.length &gt; <span class="hljs-number">0</span>) name = args[<span class="hljs-number">0</span>];<br> 		<span class="hljs-keyword">else</span> &#123;<br>			<span class="hljs-type">Scanner</span> <span class="hljs-variable">in</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Scanner</span>(System.in);<br>			System.out.println(<span class="hljs-string">&quot;Enter class name (e.g. java.util.Date): &quot;</span>);<br>			name = in.next();<br>		&#125;<br> 		<span class="hljs-keyword">try</span> &#123;<br>			<span class="hljs-comment">// print class name and superclass name (if != Object)</span><br>			<span class="hljs-type">Class</span> <span class="hljs-variable">cl</span> <span class="hljs-operator">=</span> Class.forName(name);<br>			<span class="hljs-type">Class</span> <span class="hljs-variable">supercl</span> <span class="hljs-operator">=</span> cl.getSuperclass();<br>			<span class="hljs-type">String</span> <span class="hljs-variable">modifiers</span> <span class="hljs-operator">=</span> Modifier.toString(cl.getModifiers());<br>			<span class="hljs-keyword">if</span> (modifiers.length() &gt; <span class="hljs-number">0</span>) System.out.print(modifiers + <span class="hljs-string">&quot; &quot;</span>);<br>			System.out.print(<span class="hljs-string">&quot;class &quot;</span> + name);<br>			<span class="hljs-keyword">if</span> (supercl != <span class="hljs-literal">null</span> &amp;&amp; supercl != Object.class) System.out.print(<span class="hljs-string">&quot; extends &quot;</span>+ supercl.getName());<br>			System.out.print(<span class="hljs-string">&quot;\n&#123;\n&quot;</span>);<br>			<br>			printConstructors(cl);<br>			System.out.println();<br>			printMethods(cl);<br>			System.out.println();<br>			printFields(cl);<br>			System.out.println(<span class="hljs-string">&quot;&#125;&quot;</span>);<br>		&#125;<br>		<span class="hljs-keyword">catch</span> (ClassNotFoundException e) &#123;<br>			e.printStackTrace();<br>		&#125;<br>		System.exit(<span class="hljs-number">0</span>);<br>	&#125;<br> <br>  	<span class="hljs-comment">/**</span><br><span class="hljs-comment">	* Prints all constructors of a class</span><br><span class="hljs-comment">	* <span class="hljs-doctag">@param</span> cl a class</span><br><span class="hljs-comment">	*/</span><br>	<span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">printConstructors</span><span class="hljs-params">(Class cl)</span> &#123;<br>		Constructor[] constructors = cl.getDeclaredConstructors();<br>		<br>		<span class="hljs-keyword">for</span> (Constructor c : constructors) &#123;<br>			<span class="hljs-type">String</span> <span class="hljs-variable">name</span> <span class="hljs-operator">=</span> c.getName();<br>			System.out.print(<span class="hljs-string">&quot; &quot;</span>);<br>			<span class="hljs-type">String</span> <span class="hljs-variable">modifiers</span> <span class="hljs-operator">=</span> Modifier.toString(c.getModifiers());<br>			<span class="hljs-keyword">if</span> (modifiers.length() &gt; <span class="hljs-number">0</span>) System.out.print(modifiers + <span class="hljs-string">&quot; &quot;</span>); <br>			System.out.print(name + <span class="hljs-string">&quot;(&quot;</span>);<br> 			<span class="hljs-comment">// print parameter types</span><br>			Class[] paramTypes = c.getParameterTypes();<br>			<span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> <span class="hljs-variable">j</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>; j &lt; paramTypes.length; j++) &#123;<br>				<span class="hljs-keyword">if</span> (j &gt; <span class="hljs-number">0</span>) System.out.print(<span class="hljs-string">&quot;, &quot;</span>);<br>				System.out.print(paramTypes[j].getName());<br>			&#125;<br>			System.out.println(<span class="hljs-string">&quot;);&quot;</span>);<br>		&#125;<br>	&#125;<br><br> 	<span class="hljs-comment">/**</span><br><span class="hljs-comment">	* Prints all methods of a class</span><br><span class="hljs-comment">	* <span class="hljs-doctag">@param</span> cl a class</span><br><span class="hljs-comment">	*/</span><br>	<span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">printMethods</span><span class="hljs-params">(Class cl)</span> &#123;<br>		Method[] methods = cl.getDeclaredMethods();<br><br>		<span class="hljs-keyword">for</span> (Method m : methods) &#123;<br>			<span class="hljs-type">Class</span> <span class="hljs-variable">retType</span> <span class="hljs-operator">=</span> m.getReturnType();<br>			<span class="hljs-type">String</span> <span class="hljs-variable">name</span> <span class="hljs-operator">=</span> m.getName();<br>			System.out.print(<span class="hljs-string">&quot; &quot;</span>);<br>			<span class="hljs-comment">// print modifiers, return type and method name</span><br>			<span class="hljs-type">String</span> <span class="hljs-variable">modifiers</span> <span class="hljs-operator">=</span> Modifier.toString(m.getModifiers());<br>			<span class="hljs-keyword">if</span> (modifiers.length() &gt; <span class="hljs-number">0</span>) System.out.print(modifiers + <span class="hljs-string">&quot; &quot;</span>); <br>			System.out.print(retType.getName() + <span class="hljs-string">&quot; &quot;</span> + name + <span class="hljs-string">&quot;(&quot;</span>);<br> <br>			<span class="hljs-comment">// print parameter types</span><br>			Class[] paramTypes = m.getParameterTypes();<br>			<span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> <span class="hljs-variable">j</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>; j &lt; paramTypes.length; j++) &#123;<br>				<span class="hljs-keyword">if</span> (j &gt; <span class="hljs-number">0</span>) System.out.print(<span class="hljs-string">&quot;, &quot;</span>);<br>				System.out.print(paramTypes[j].getName());<br>			&#125;<br>			System.out.println(<span class="hljs-string">&quot;);&quot;</span>);<br>		&#125;<br>	&#125;<br><br>	<span class="hljs-comment">/**</span><br><span class="hljs-comment">	* Prints all fields of a class</span><br><span class="hljs-comment">	* <span class="hljs-doctag">@param</span> cl a class</span><br><span class="hljs-comment">	*/</span><br>	<span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">printFields</span><span class="hljs-params">(Class cl)</span> &#123;<br>		Field[] fields = cl.getDeclaredFields();<br><br>		<span class="hljs-keyword">for</span> (Field f : fields) &#123;<br>			<span class="hljs-type">Class</span> <span class="hljs-variable">type</span> <span class="hljs-operator">=</span> f.getType();<br>			<span class="hljs-type">String</span> <span class="hljs-variable">name</span> <span class="hljs-operator">=</span> f.getName();<br>			System.out.print(<span class="hljs-string">&quot; &quot;</span>);<br>			<span class="hljs-type">String</span> <span class="hljs-variable">modifiers</span> <span class="hljs-operator">=</span> Modifier.toString(f.getModifiers());<br>			<span class="hljs-keyword">if</span> (modifiers.length() &gt; <span class="hljs-number">0</span>) System.out.print(modifiers + <span class="hljs-string">&quot; &quot;</span>); <br>			System.out.println(type.getName() + <span class="hljs-string">&quot; &quot;</span> + name + <span class="hljs-string">&quot;;&quot;</span>);<br>		&#125;<br>	&#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>input:  java.lang.Double<br>下面是输出结果: </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">java</span>.lang.Double <span class="hljs-keyword">extends</span> <span class="hljs-title class_">java</span>.lang.Number<br>&#123;<br>	 <span class="hljs-comment">//Constructor</span><br>	 <span class="hljs-keyword">public</span> java.lang.Double(java.lang.String);<br>	 <span class="hljs-keyword">public</span> java.lang.Double(<span class="hljs-type">double</span>);<br>	 <br>	 <span class="hljs-comment">//All methods</span><br>	 <span class="hljs-keyword">public</span> <span class="hljs-type">int</span> <span class="hljs-title function_">hashCode</span><span class="hljs-params">()</span>;<br>	 <span class="hljs-keyword">public</span> <span class="hljs-type">int</span> <span class="hljs-title function_">compareTo</span><span class="hljs-params">(java.lang.Object)</span>;<br>	 <span class="hljs-keyword">public</span> <span class="hljs-type">int</span> <span class="hljs-title function_">compareTo</span><span class="hljs-params">(java.lang.Double)</span>;<br>	 <span class="hljs-keyword">public</span> <span class="hljs-type">boolean</span> <span class="hljs-title function_">equals</span><span class="hljs-params">(java.lang.Object)</span>;<br>	 <span class="hljs-keyword">public</span> java.lang.String <span class="hljs-title function_">toString</span><span class="hljs-params">()</span>;<br>	 <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> java.lang.String <span class="hljs-title function_">toString</span><span class="hljs-params">(<span class="hljs-type">double</span>)</span>;<br>	 <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> java.lang.Double <span class="hljs-title function_">valueOf</span><span class="hljs-params">(java.lang.String)</span>;<br>	 <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-type">boolean</span> <span class="hljs-title function_">isNaN</span><span class="hljs-params">(<span class="hljs-type">double</span>)</span>;<br>	 <span class="hljs-keyword">public</span> <span class="hljs-type">boolean</span> <span class="hljs-title function_">isNaN</span><span class="hljs-params">()</span>;<br>	 <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-type">boolean</span> <span class="hljs-title function_">isInfinite</span><span class="hljs-params">(<span class="hljs-type">double</span>)</span>;<br>	 <span class="hljs-keyword">public</span> <span class="hljs-type">boolean</span> <span class="hljs-title function_">isInfinite</span><span class="hljs-params">()</span>;<br>	 <span class="hljs-keyword">public</span> <span class="hljs-type">byte</span> <span class="hljs-title function_">byteValue</span><span class="hljs-params">()</span>;<br>	 <span class="hljs-keyword">public</span> <span class="hljs-type">short</span> <span class="hljs-title function_">shortValue</span><span class="hljs-params">()</span>;<br>	 <span class="hljs-keyword">public</span> <span class="hljs-type">int</span> <span class="hljs-title function_">intValue</span><span class="hljs-params">()</span>;<br>	 <span class="hljs-keyword">public</span> <span class="hljs-type">long</span> <span class="hljs-title function_">longValue</span><span class="hljs-params">()</span>;<br>	 <span class="hljs-keyword">public</span> <span class="hljs-type">float</span> <span class="hljs-title function_">floatValue</span><span class="hljs-params">()</span>;<br>	 <span class="hljs-keyword">public</span> <span class="hljs-type">double</span> <span class="hljs-title function_">doubleValue</span><span class="hljs-params">()</span>;<br>	 <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-type">double</span> <span class="hljs-title function_">parseDouble</span><span class="hljs-params">(java.lang.String)</span>;<br>	 <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">native</span> <span class="hljs-type">long</span> <span class="hljs-title function_">doubleToLongBits</span><span class="hljs-params">(<span class="hljs-type">double</span>)</span>;<br>	 <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">native</span> <span class="hljs-type">long</span> <span class="hljs-title function_">doubleToRawLongBits</span><span class="hljs-params">(<span class="hljs-type">double</span>)</span>;<br>	 <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">native</span> <span class="hljs-type">double</span> <span class="hljs-title function_">longBitsToDouble</span><span class="hljs-params">(<span class="hljs-type">long</span>)</span>;<br>	 <br>	 <span class="hljs-comment">//All fields</span><br>	 <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> <span class="hljs-type">double</span> POSITIVE_INFINITY;<br>	 <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> <span class="hljs-type">double</span> NEGATIVE_INFINITY;<br>	 <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> <span class="hljs-type">double</span> NaN;<br>	 <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> <span class="hljs-type">double</span> MAX_VALUE;<br>	 <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> <span class="hljs-type">double</span> MIN_VALUE;<br>	 <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> java.lang.Class TYPE;<br>	 <span class="hljs-keyword">private</span> <span class="hljs-type">double</span> value;<br>	 <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> <span class="hljs-type">long</span> serialVersionUID;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h1 id="反射的优势和劣势"><a href="#反射的优势和劣势" class="headerlink" title="反射的优势和劣势"></a>反射的优势和劣势</h1><p>优势</p>
+<blockquote>
+<ul>
+<li>使用反射的时候，可以只传入类名参数，就可以生成对象，降低了耦合性，使得程序更具灵活性</li>
+</ul>
+</blockquote>
+<p>劣势</p>
+<blockquote>
+<ul>
+<li>因为是运行时的操作, 所以性能方面要慢</li>
+<li>反射调用方法时可以忽略权限检查，因此可能会破坏封装性而导致安全问题</li>
+</ul>
+</blockquote>
+<h1 id="反射的实际使用场景"><a href="#反射的实际使用场景" class="headerlink" title="反射的实际使用场景"></a>反射的实际使用场景</h1><p>以下是一些反射的使用场景</p>
+<h2 id="IDE的使用"><a href="#IDE的使用" class="headerlink" title="IDE的使用"></a>IDE的使用</h2><blockquote>
+<ul>
+<li>当我们在使用 IDE(如 Eclipse，IDEA)时，当我们输入一个对象或类并想调用它的属性或方法时，一按点号，编译器就会自动列出它的属性或方法，这里就会用到反射</li>
+</ul>
+</blockquote>
+<h2 id="JDBC连接数据库"><a href="#JDBC连接数据库" class="headerlink" title="JDBC连接数据库"></a>JDBC连接数据库</h2><blockquote>
+<ul>
+<li>数据库的连接驱动类就是编译的时候不知道你到底是用的mysql，oracle还是其他数据库，而是由运行期动态加载的</li>
+</ul>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">// 1.加载驱动程序</span><br>      Class.forName(<span class="hljs-string">&quot;com.mysql.jdbc.Driver&quot;</span>);<br>      <span class="hljs-comment">// 2.获得数据库的连接</span><br>      <span class="hljs-type">Connection</span> <span class="hljs-variable">conn</span> <span class="hljs-operator">=</span> DriverManager.getConnection(URL, NAME, PASSWORD);<br>     .......<br></code></pre></td></tr></table></figure>
+<h2 id="配置文件"><a href="#配置文件" class="headerlink" title="配置文件"></a>配置文件</h2><blockquote>
+<ul>
+<li>反射最重要的用途就是开发各种通用框架。很多框架（比如 Spring）都是配置化的（比如通过 XML 文件配置 Bean），为了保证框架的通用性，它们可能需要根据配置文件加载不同的对象或类，调用不同的方法，这个时候就必须用到反射，运行时动态加载需要加载的对象。</li>
+</ul>
+</blockquote>
+<p>举一个例子，在运用 Struts 2 框架的开发中我们一般会在 struts.xml 里去配置 Action，比如：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">action</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;login&quot;</span></span><br><span class="hljs-tag">               <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;org.ScZyhSoft.test.action.SimpleLoginAction&quot;</span></span><br><span class="hljs-tag">               <span class="hljs-attr">method</span>=<span class="hljs-string">&quot;execute&quot;</span>&gt;</span><br>           <span class="hljs-tag">&lt;<span class="hljs-name">result</span>&gt;</span>/shop/shop-index.jsp<span class="hljs-tag">&lt;/<span class="hljs-name">result</span>&gt;</span><br>           <span class="hljs-tag">&lt;<span class="hljs-name">result</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;error&quot;</span>&gt;</span>login.jsp<span class="hljs-tag">&lt;/<span class="hljs-name">result</span>&gt;</span><br> <span class="hljs-tag">&lt;/<span class="hljs-name">action</span>&gt;</span><br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<p>配置文件与 Action 建立了一种映射关系，当 View 层发出请求时，请求会被 <code>StrutsPrepareAndExecuteFilter</code> 拦截，然后 <code>StrutsPrepareAndExecuteFilter</code> 会去动态地创建 Action 实例。比如我们请求 <code>login.action</code>，那么 <code>StrutsPrepareAndExecuteFilter</code>就会去解析<code>struts.xml</code>文件，检索action中name为login的Action，并根据class属性创建SimpleLoginAction实例，并用invoke方法来调用execute方法，这个过程离不开反射。</p>
+</blockquote>
+<blockquote>
+<p>对与框架开发人员来说，反射虽小但作用非常大，它是各种容器实现的核心。而对于一般的开发者来说，不深入框架开发则用反射用的就会少一点，不过了解一下框架的底层机制有助于丰富自己的编程思想，也是很有益的。</p>
+</blockquote>
+<h1 id="Example"><a href="#Example" class="headerlink" title="Example"></a>Example</h1><h2 id="利用反射写一个Generic-Array"><a href="#利用反射写一个Generic-Array" class="headerlink" title="利用反射写一个Generic Array"></a>利用反射写一个Generic Array</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">package</span> arrays;<br><span class="hljs-keyword">import</span> java.lang.reflect.*;<br><span class="hljs-keyword">import</span> java.util.*;<br><br><span class="hljs-comment">/**</span><br><span class="hljs-comment">* This program demonstrates the use of reflection for manipulating arrays.</span><br><span class="hljs-comment">* <span class="hljs-doctag">@version</span> 1.2 2012-05-04</span><br><span class="hljs-comment">* <span class="hljs-doctag">@author</span> Cay Horstmann</span><br><span class="hljs-comment">*/</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">CopyOfTest</span><br>&#123;<br>	<span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String[] args)</span><br>	&#123;<br>		<span class="hljs-type">int</span>[] a = &#123; <span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span> &#125;;<br>		a = (<span class="hljs-type">int</span>[]) goodCopyOf(a, <span class="hljs-number">10</span>);<br>		System.out.println(Arrays.toString(a));<br>		String[] b = &#123; <span class="hljs-string">&quot;Tom&quot;</span>, <span class="hljs-string">&quot;Dick&quot;</span>, <span class="hljs-string">&quot;Harry&quot;</span> &#125;;<br>		b = (String[]) goodCopyOf(b, <span class="hljs-number">10</span>);<br>		System.out.println(Arrays.toString(b));<br>		System.out.println(<span class="hljs-string">&quot;The following call will generate an exception.&quot;</span>);<br>		b = (String[]) badCopyOf(b, <span class="hljs-number">10</span>);<br>	&#125;<br><br><span class="hljs-comment">/**</span><br><span class="hljs-comment">* This method attempts to grow an array by allocating a new array and copying all elements.</span><br><span class="hljs-comment">* <span class="hljs-doctag">@param</span> a the array to grow</span><br><span class="hljs-comment">* <span class="hljs-doctag">@param</span> newLength the new length</span><br><span class="hljs-comment">* <span class="hljs-doctag">@return</span> a larger array that contains all elements of a. However, the returned array has </span><br><span class="hljs-comment">* type Object[], not the same type as a</span><br><span class="hljs-comment">*/</span><br>	<span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> Object[] badCopyOf(Object[] a, <span class="hljs-type">int</span> newLength) <span class="hljs-comment">// not useful</span><br>	&#123;<br>		Object[] newArray = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Object</span>[newLength];<br>		System.arraycopy(a, <span class="hljs-number">0</span>, newArray, <span class="hljs-number">0</span>, Math.min(a.length, newLength));<br>		<span class="hljs-keyword">return</span> newArray;<br>	&#125;<br> <br><span class="hljs-comment">/**</span><br><span class="hljs-comment">* This method grows an array by allocating a new array of the same type and</span><br><span class="hljs-comment">* copying all elements.</span><br><span class="hljs-comment">* <span class="hljs-doctag">@param</span> a the array to grow. This can be an object array or a primitive</span><br><span class="hljs-comment">* type array</span><br><span class="hljs-comment">* <span class="hljs-doctag">@return</span> a larger array that contains all elements of a.</span><br><span class="hljs-comment">*/</span><br>	<span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> Object <span class="hljs-title function_">goodCopyOf</span><span class="hljs-params">(Object a, <span class="hljs-type">int</span> newLength)</span> <br>	&#123;<br>		<span class="hljs-type">Class</span> <span class="hljs-variable">cl</span> <span class="hljs-operator">=</span> a.getClass();<br>		<span class="hljs-keyword">if</span> (!cl.isArray()) <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>;<br>		<span class="hljs-type">Class</span> <span class="hljs-variable">componentType</span> <span class="hljs-operator">=</span> cl.getComponentType();<br>		<span class="hljs-type">int</span> <span class="hljs-variable">length</span> <span class="hljs-operator">=</span> Array.getLength(a);<br>		<span class="hljs-type">Object</span> <span class="hljs-variable">newArray</span> <span class="hljs-operator">=</span> Array.newInstance(componentType, newLength);<br>		System.arraycopy(a, <span class="hljs-number">0</span>, newArray, <span class="hljs-number">0</span>, Math.min(length, newLength));<br>		<span class="hljs-keyword">return</span> newArray;<br>	&#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h2 id="自定义配置文件"><a href="#自定义配置文件" class="headerlink" title="自定义配置文件"></a>自定义配置文件</h2><p><strong>原文链接：<a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_45333509/article/details/115360094">https://blog.csdn.net/weixin_45333509/article/details/115360094</a></strong></p>
+<blockquote>
+<p>游戏中有两名英雄角色供玩家选择<br>角色1：<br>姓名：安琪拉<br>职业：中单<br>一技能：程序中会使用public修饰，代表角色行为的方法<br>被动：程序中会使用private修饰，代表角色行为的方法</p>
+</blockquote>
+<blockquote>
+<p>角色2<br>姓名：凯<br>职业：上单<br>一技能：程序中会使用public修饰，代表角色行为的方法<br>被动：程序中会使用private修饰，代表角色行为的方法</p>
+</blockquote>
+<blockquote>
+<p>此时我们需要一个配置文件供玩家配置想要选择的英雄角色以及要释放的技能 people.properties</p>
+</blockquote>
+<p><strong>定义角色1 AnQiLa</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">package</span> com.demo.roles;<br><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">AnQiLa</span> &#123;<br>    <span class="hljs-keyword">private</span> String name=<span class="hljs-string">&quot;安琪拉&quot;</span>;<br>    <span class="hljs-keyword">private</span> String job=<span class="hljs-string">&quot;中单&quot;</span>;<br><br>    <span class="hljs-comment">//私有化角色触发被动技能的方法</span><br>    <span class="hljs-keyword">private</span> String <span class="hljs-title function_">getPassiveSkill</span><span class="hljs-params">()</span>&#123;<br>        <span class="hljs-keyword">return</span> name+<span class="hljs-string">&quot;: [触发了被动技能！]&quot;</span>;<br>    &#125;<br><br>    <span class="hljs-comment">//角色一技能</span><br>    <span class="hljs-keyword">public</span> String <span class="hljs-title function_">getFirstSkill</span><span class="hljs-params">()</span>&#123;<br>        <span class="hljs-keyword">return</span> name+<span class="hljs-string">&quot;: [在中路使用了一技能]&quot;</span>;<br><br>    &#125;<br><br>    <span class="hljs-keyword">public</span> String <span class="hljs-title function_">getName</span><span class="hljs-params">()</span> &#123;<br>        <span class="hljs-keyword">return</span> name;<br>    &#125;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">setName</span><span class="hljs-params">(String name)</span> &#123;<br>        <span class="hljs-built_in">this</span>.name = name;<br>    &#125;<br><br>    <span class="hljs-keyword">public</span> String <span class="hljs-title function_">getJob</span><span class="hljs-params">()</span> &#123;<br>        <span class="hljs-keyword">return</span> job;<br>    &#125;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">setJob</span><span class="hljs-params">(String job)</span> &#123;<br>        <span class="hljs-built_in">this</span>.job = job;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p><strong>定义角色2 Kai</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">package</span> com.demo.roles;<br><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">Kai</span> &#123;<br>    <span class="hljs-keyword">private</span> String name=<span class="hljs-string">&quot;凯&quot;</span>;<br>    <span class="hljs-keyword">private</span> String job=<span class="hljs-string">&quot;上单&quot;</span>;<br><br>    <span class="hljs-comment">//私有化角色触发被动技能的方法</span><br>    <span class="hljs-keyword">private</span> String <span class="hljs-title function_">getPassiveSkill</span><span class="hljs-params">()</span>&#123;<br>        <span class="hljs-keyword">return</span> name+<span class="hljs-string">&quot;: [触发了被动技能！]&quot;</span>;<br>    &#125;<br><br>    <span class="hljs-comment">//角色一技能</span><br>    <span class="hljs-keyword">public</span> String <span class="hljs-title function_">getFirstSkill</span><span class="hljs-params">()</span>&#123;<br>        <span class="hljs-keyword">return</span> name+<span class="hljs-string">&quot;: [在上路使用了一技能]&quot;</span>;<br><br>    &#125;<br><br>    <span class="hljs-keyword">public</span> String <span class="hljs-title function_">getName</span><span class="hljs-params">()</span> &#123;<br>        <span class="hljs-keyword">return</span> name;<br>    &#125;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">setName</span><span class="hljs-params">(String name)</span> &#123;<br>        <span class="hljs-built_in">this</span>.name = name;<br>    &#125;<br><br>    <span class="hljs-keyword">public</span> String <span class="hljs-title function_">getJob</span><span class="hljs-params">()</span> &#123;<br>        <span class="hljs-keyword">return</span> job;<br>    &#125;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">setJob</span><span class="hljs-params">(String job)</span> &#123;<br>        <span class="hljs-built_in">this</span>.job = job;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p><strong>开发业务场景工具类</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">package</span> com.demo.controller;<br><br><span class="hljs-keyword">import</span> java.io.InputStream;<br><span class="hljs-keyword">import</span> java.lang.reflect.Method;<br><span class="hljs-keyword">import</span> java.util.Properties;<br><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">ReflectUtil</span> &#123;<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String[] args)</span> <span class="hljs-keyword">throws</span> Exception &#123;<br>        <span class="hljs-comment">//加载玩家配置信息</span><br>        <span class="hljs-type">Properties</span> <span class="hljs-variable">properties</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Properties</span>();<br>        <span class="hljs-type">ClassLoader</span> <span class="hljs-variable">classLoader</span> <span class="hljs-operator">=</span> ReflectUtil.class.getClassLoader();<br>        <span class="hljs-type">InputStream</span> <span class="hljs-variable">resourceAsStream</span> <span class="hljs-operator">=</span> classLoader.getResourceAsStream(<span class="hljs-string">&quot;people.properties&quot;</span>);<br>        properties.load(resourceAsStream);<br><br>        <span class="hljs-comment">//从配置文件中读取玩家选择的英雄角色</span><br>        <span class="hljs-type">String</span> <span class="hljs-variable">role</span> <span class="hljs-operator">=</span> properties.getProperty(<span class="hljs-string">&quot;object.role&quot;</span>);<br>        <span class="hljs-comment">//从配置文件中读取玩家使用的技能</span><br>        <span class="hljs-type">String</span> <span class="hljs-variable">actions</span> <span class="hljs-operator">=</span> properties.getProperty(<span class="hljs-string">&quot;method.skills&quot;</span>);<br>        String[] skills = actions.split(<span class="hljs-string">&quot;,&quot;</span>);<br><br>        <span class="hljs-comment">//通过反射实例化玩家选择的角色对象</span><br>        <span class="hljs-type">Class</span> <span class="hljs-variable">aClass</span> <span class="hljs-operator">=</span> Class.forName(role);<br>        <span class="hljs-type">Object</span> <span class="hljs-variable">instance</span> <span class="hljs-operator">=</span> aClass.newInstance();<br><br>        <span class="hljs-comment">//遍历玩家选择使用的技能</span><br>        <span class="hljs-keyword">for</span> (String skill : skills) &#123;<br>            <span class="hljs-comment">//获取玩家使用角色的所有技能</span><br>            <span class="hljs-type">Method</span> <span class="hljs-variable">declaredSkill</span> <span class="hljs-operator">=</span> aClass.getDeclaredMethod(skill);<br>            <span class="hljs-comment">//判断获得的技能是否私有</span><br>            <span class="hljs-keyword">if</span> (declaredSkill.toString().contains(<span class="hljs-string">&quot;private&quot;</span>)) &#123;<br>                <span class="hljs-comment">//如果是私有的被动技能，则需设置私有技能可使用</span><br>                declaredSkill.setAccessible(<span class="hljs-literal">true</span>);<br>                <span class="hljs-comment">//使用被动</span><br>                <span class="hljs-type">Object</span> <span class="hljs-variable">invoke</span> <span class="hljs-operator">=</span> declaredSkill.invoke(instance, <span class="hljs-literal">null</span>);<br>                System.out.println(invoke.toString());<br>            &#125; <span class="hljs-keyword">else</span> &#123;<br>                <span class="hljs-comment">//如果是普通技能 则可以直接访问</span><br>                <span class="hljs-type">Object</span> <span class="hljs-variable">invoke</span> <span class="hljs-operator">=</span> declaredSkill.invoke(instance, <span class="hljs-literal">null</span>);<br>                System.out.println(invoke.toString());<br>            &#125;<br>        &#125;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>接下来玩家只需要通过更改people.properties配置文件选择需要使用的角色和需要使用的技能，工具类就可以帮我们完成角色的创建以及技能的释放</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs xml">#玩家配置需要选择的英雄角色<br>#选择AnQiLa[安琪拉]<br>object.role=com.demo.roles.AnQiLa<br><br>#玩家配置需要使用的技能,多个技能之间用英文逗号隔开<br>#选择使用一技能并触发私有的被动技能<br>method.skills=getPassiveSkill,getFirstSkill<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs java">F:\software\Java\jdk1<span class="hljs-number">.8</span><span class="hljs-number">.0_121</span>\bin\java.exe <span class="hljs-string">&quot;-javaagent:D:\IntelliJ IDEA 2019.1.4\lib\idea_rt.jar=63738:D:\IntelliJ IDEA 2019.1.4\bin&quot;</span> -Dfile.encoding=UTF-<span class="hljs-number">8</span> -classpath F:\software\Java\jdk1<span class="hljs-number">.8</span><span class="hljs-number">.0_121</span>\jre\lib\charsets.jar;F:\software\Java\jdk1<span class="hljs-number">.8</span><span class="hljs-number">.0_121</span>\jre\lib\deploy.jar;F:\software\Java\jdk1<span class="hljs-number">.8</span><span class="hljs-number">.0_121</span>\jre\lib\ext\access-bridge-<span class="hljs-number">64.</span>jar;F:\software\Java\jdk1<span class="hljs-number">.8</span><span class="hljs-number">.0_121</span>\jre\lib\ext\cldrdata.jar;F:\software\Java\jdk1<span class="hljs-number">.8</span><span class="hljs-number">.0_121</span>\jre\lib\ext\dnsns.jar;F:\software\Java\jdk1<span class="hljs-number">.8</span><span class="hljs-number">.0_121</span>\jre\lib\ext\jaccess.jar;F:\software\Java\jdk1<span class="hljs-number">.8</span><span class="hljs-number">.0_121</span>\jre\lib\ext\jfxrt.jar;F:\software\Java\jdk1<span class="hljs-number">.8</span><span class="hljs-number">.0_121</span>\jre\lib\ext\localedata.jar;F:\software\Java\jdk1<span class="hljs-number">.8</span><span class="hljs-number">.0_121</span>\jre\lib\ext\nashorn.jar;F:\software\Java\jdk1<span class="hljs-number">.8</span><span class="hljs-number">.0_121</span>\jre\lib\ext\sunec.jar;F:\software\Java\jdk1<span class="hljs-number">.8</span><span class="hljs-number">.0_121</span>\jre\lib\ext\sunjce_provider.jar;F:\software\Java\jdk1<span class="hljs-number">.8</span><span class="hljs-number">.0_121</span>\jre\lib\ext\sunmscapi.jar;F:\software\Java\jdk1<span class="hljs-number">.8</span><span class="hljs-number">.0_121</span>\jre\lib\ext\sunpkcs11.jar;F:\software\Java\jdk1<span class="hljs-number">.8</span><span class="hljs-number">.0_121</span>\jre\lib\ext\zipfs.jar;F:\software\Java\jdk1<span class="hljs-number">.8</span><span class="hljs-number">.0_121</span>\jre\lib\javaws.jar;F:\software\Java\jdk1<span class="hljs-number">.8</span><span class="hljs-number">.0_121</span>\jre\lib\jce.jar;F:\software\Java\jdk1<span class="hljs-number">.8</span><span class="hljs-number">.0_121</span>\jre\lib\jfr.jar;F:\software\Java\jdk1<span class="hljs-number">.8</span><span class="hljs-number">.0_121</span>\jre\lib\jfxswt.jar;F:\software\Java\jdk1<span class="hljs-number">.8</span><span class="hljs-number">.0_121</span>\jre\lib\jsse.jar;F:\software\Java\jdk1<span class="hljs-number">.8</span><span class="hljs-number">.0_121</span>\jre\lib\management-agent.jar;F:\software\Java\jdk1<span class="hljs-number">.8</span><span class="hljs-number">.0_121</span>\jre\lib\plugin.jar;F:\software\Java\jdk1<span class="hljs-number">.8</span><span class="hljs-number">.0_121</span>\jre\lib\resources.jar;F:\software\Java\jdk1<span class="hljs-number">.8</span><span class="hljs-number">.0_121</span>\jre\lib\rt.jar;D:\ideastudyspace\spring_study\reflect-demo\target\classes com.demo.controller.ReflectUtil<br>安琪拉: [触发了被动技能！]<br>安琪拉: [在中路使用了一技能]<br><br>Process finished with exit code <span class="hljs-number">0</span><br></code></pre></td></tr></table></figure>
+
+
+<p>假如玩家此时想玩上单使用凯，直接在people.properties配置文件里选择即可</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs xml">#玩家配置需要选择的英雄角色<br>#选择Kai[凯]<br>object.role=com.demo.roles.Kai<br><br>#玩家配置需要使用的技能,多个技能之间用英文逗号隔开<br>#选择使用一技能并触发私有的被动技能<br>method.skills=getPassiveSkill,getFirstSkill<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs java">F:\software\Java\jdk1<span class="hljs-number">.8</span><span class="hljs-number">.0_121</span>\bin\java.exe <span class="hljs-string">&quot;-javaagent:D:\IntelliJ IDEA 2019.1.4\lib\idea_rt.jar=63947:D:\IntelliJ IDEA 2019.1.4\bin&quot;</span> -Dfile.encoding=UTF-<span class="hljs-number">8</span> -classpath F:\software\Java\jdk1<span class="hljs-number">.8</span><span class="hljs-number">.0_121</span>\jre\lib\charsets.jar;F:\software\Java\jdk1<span class="hljs-number">.8</span><span class="hljs-number">.0_121</span>\jre\lib\deploy.jar;F:\software\Java\jdk1<span class="hljs-number">.8</span><span class="hljs-number">.0_121</span>\jre\lib\ext\access-bridge-<span class="hljs-number">64.</span>jar;F:\software\Java\jdk1<span class="hljs-number">.8</span><span class="hljs-number">.0_121</span>\jre\lib\ext\cldrdata.jar;F:\software\Java\jdk1<span class="hljs-number">.8</span><span class="hljs-number">.0_121</span>\jre\lib\ext\dnsns.jar;F:\software\Java\jdk1<span class="hljs-number">.8</span><span class="hljs-number">.0_121</span>\jre\lib\ext\jaccess.jar;F:\software\Java\jdk1<span class="hljs-number">.8</span><span class="hljs-number">.0_121</span>\jre\lib\ext\jfxrt.jar;F:\software\Java\jdk1<span class="hljs-number">.8</span><span class="hljs-number">.0_121</span>\jre\lib\ext\localedata.jar;F:\software\Java\jdk1<span class="hljs-number">.8</span><span class="hljs-number">.0_121</span>\jre\lib\ext\nashorn.jar;F:\software\Java\jdk1<span class="hljs-number">.8</span><span class="hljs-number">.0_121</span>\jre\lib\ext\sunec.jar;F:\software\Java\jdk1<span class="hljs-number">.8</span><span class="hljs-number">.0_121</span>\jre\lib\ext\sunjce_provider.jar;F:\software\Java\jdk1<span class="hljs-number">.8</span><span class="hljs-number">.0_121</span>\jre\lib\ext\sunmscapi.jar;F:\software\Java\jdk1<span class="hljs-number">.8</span><span class="hljs-number">.0_121</span>\jre\lib\ext\sunpkcs11.jar;F:\software\Java\jdk1<span class="hljs-number">.8</span><span class="hljs-number">.0_121</span>\jre\lib\ext\zipfs.jar;F:\software\Java\jdk1<span class="hljs-number">.8</span><span class="hljs-number">.0_121</span>\jre\lib\javaws.jar;F:\software\Java\jdk1<span class="hljs-number">.8</span><span class="hljs-number">.0_121</span>\jre\lib\jce.jar;F:\software\Java\jdk1<span class="hljs-number">.8</span><span class="hljs-number">.0_121</span>\jre\lib\jfr.jar;F:\software\Java\jdk1<span class="hljs-number">.8</span><span class="hljs-number">.0_121</span>\jre\lib\jfxswt.jar;F:\software\Java\jdk1<span class="hljs-number">.8</span><span class="hljs-number">.0_121</span>\jre\lib\jsse.jar;F:\software\Java\jdk1<span class="hljs-number">.8</span><span class="hljs-number">.0_121</span>\jre\lib\management-agent.jar;F:\software\Java\jdk1<span class="hljs-number">.8</span><span class="hljs-number">.0_121</span>\jre\lib\plugin.jar;F:\software\Java\jdk1<span class="hljs-number">.8</span><span class="hljs-number">.0_121</span>\jre\lib\resources.jar;F:\software\Java\jdk1<span class="hljs-number">.8</span><span class="hljs-number">.0_121</span>\jre\lib\rt.jar;D:\ideastudyspace\spring_study\reflect-demo\target\classes com.demo.controller.ReflectUtil<br>凯: [触发了被动技能！]<br>凯: [在上路使用了一技能]<br><br>Process finished with exit code <span class="hljs-number">0</span><br></code></pre></td></tr></table></figure>
+
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Java-SE/" class="category-chain-item">Java SE</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/Java-SE/Java-%E9%AB%98%E7%BA%A7%E7%89%B9%E6%80%A7/" class="category-chain-item">Java --- 高级特性</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Java基础 --- 反射机制 Reflection</div>
+      <div>http://example.com/2024/04/26/Java基础 --- 反射机制 Reflection/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>XL</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年4月26日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/04/26/Java%E5%9F%BA%E7%A1%80%20---%20%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86%20Proxy/" title="Java基础 --- 动态代理 Proxy">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Java基础 --- 动态代理 Proxy</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/04/26/%E6%95%B0%E6%8D%AE%E5%BA%93JDBC%20---%20Java%20Database%20Connectivity/" title="数据库JDBC --- Java Database Connectivity">
+                        <span class="hidden-mobile">数据库JDBC --- Java Database Connectivity</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
